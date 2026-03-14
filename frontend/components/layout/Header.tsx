@@ -25,9 +25,9 @@ export function Header({ locale }: HeaderProps) {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [currentHash, setCurrentHash] = useState(() =>
-    typeof window !== 'undefined' ? window.location.hash : ''
-  );
+  const [currentHash, setCurrentHash] = useState('');
+
+
 
   useEffect(() => {
     function onScroll() {
@@ -38,11 +38,17 @@ export function Header({ locale }: HeaderProps) {
   }, []);
 
   useEffect(() => {
-    function onHashChange() {
-      setCurrentHash(window.location.hash);
+    function updateHash() {
+      if (typeof window !== 'undefined') {
+        setCurrentHash(window.location.hash);
+      }
     }
-    window.addEventListener('hashchange', onHashChange);
-    return () => window.removeEventListener('hashchange', onHashChange);
+
+    // Set the initial hash after mount to avoid SSR/client mismatches
+    updateHash();
+
+    window.addEventListener('hashchange', updateHash);
+    return () => window.removeEventListener('hashchange', updateHash);
   }, []);
 
   // Get current page path without locale prefix for switching
