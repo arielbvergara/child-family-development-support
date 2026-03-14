@@ -6,6 +6,7 @@ import { PhilosophySection } from '@/components/sections/about/PhilosophySection
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createMetadata } from '@/lib/metadata';
 import { SITE_CONFIG } from '@/lib/constants';
+import { buildBreadcrumbSchema } from '@/lib/seo';
 import type { Locale } from '@/lib/types';
 
 interface PageProps {
@@ -69,33 +70,11 @@ function buildPersonSchema(locale: string) {
   };
 }
 
-function buildBreadcrumbSchema(locale: string) {
-  const breadcrumbNames: Record<string, { home: string; about: string }> = {
-    nl: { home: 'Home', about: 'Over mij' },
-    en: { home: 'Home', about: 'About Me' },
-    de: { home: 'Startseite', about: 'Über mich' },
-  };
-  const names = breadcrumbNames[locale] ?? breadcrumbNames.nl;
-
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: names.home,
-        item: `${SITE_CONFIG.siteUrl}/${locale}`,
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: names.about,
-        item: `${SITE_CONFIG.siteUrl}/${locale}/about`,
-      },
-    ],
-  };
-}
+const BREADCRUMB_NAMES: Record<string, { home: string; about: string }> = {
+  nl: { home: 'Home', about: 'Over mij' },
+  en: { home: 'Home', about: 'About Me' },
+  de: { home: 'Startseite', about: 'Über mich' },
+};
 
 function PageHero() {
   const t = useTranslations('about');
@@ -132,11 +111,17 @@ function AboutCta({ locale }: { locale: string }) {
 
 export default async function AboutPage({ params }: PageProps) {
   const { locale } = await params;
+  const names = BREADCRUMB_NAMES[locale] ?? BREADCRUMB_NAMES.nl;
 
   return (
     <>
       <JsonLd schema={buildPersonSchema(locale)} />
-      <JsonLd schema={buildBreadcrumbSchema(locale)} />
+      <JsonLd
+        schema={buildBreadcrumbSchema(locale, [
+          { name: names.home, path: '' },
+          { name: names.about, path: '/about' },
+        ])}
+      />
       <PageHero />
       <BiographySection />
       <QualificationsSection />

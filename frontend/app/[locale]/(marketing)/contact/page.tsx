@@ -5,7 +5,7 @@ import { ContactFormSection } from '@/components/sections/contact/ContactFormSec
 import { SectionWrapper } from '@/components/ui/SectionWrapper';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createMetadata } from '@/lib/metadata';
-import { SITE_CONFIG } from '@/lib/constants';
+import { buildBreadcrumbSchema } from '@/lib/seo';
 import type { Locale } from '@/lib/types';
 
 interface PageProps {
@@ -22,33 +22,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   });
 }
 
-function buildBreadcrumbSchema(locale: string) {
-  const breadcrumbNames: Record<string, { home: string; contact: string }> = {
-    nl: { home: 'Home', contact: 'Contact' },
-    en: { home: 'Home', contact: 'Contact' },
-    de: { home: 'Startseite', contact: 'Kontakt' },
-  };
-  const names = breadcrumbNames[locale] ?? breadcrumbNames.nl;
-
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: names.home,
-        item: `${SITE_CONFIG.siteUrl}/${locale}`,
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: names.contact,
-        item: `${SITE_CONFIG.siteUrl}/${locale}/contact`,
-      },
-    ],
-  };
-}
+const BREADCRUMB_NAMES: Record<string, { home: string; contact: string }> = {
+  nl: { home: 'Home', contact: 'Contact' },
+  en: { home: 'Home', contact: 'Contact' },
+  de: { home: 'Startseite', contact: 'Kontakt' },
+};
 
 function PageHero() {
   const t = useTranslations('contact');
@@ -66,10 +44,16 @@ function PageHero() {
 
 export default async function ContactPage({ params }: PageProps) {
   const { locale } = await params;
+  const names = BREADCRUMB_NAMES[locale] ?? BREADCRUMB_NAMES.nl;
 
   return (
     <>
-      <JsonLd schema={buildBreadcrumbSchema(locale)} />
+      <JsonLd
+        schema={buildBreadcrumbSchema(locale, [
+          { name: names.home, path: '' },
+          { name: names.contact, path: '/contact' },
+        ])}
+      />
       <PageHero />
       <SectionWrapper className="bg-white">
         <div className="grid gap-12 lg:grid-cols-5 lg:gap-16">

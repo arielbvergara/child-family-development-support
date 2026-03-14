@@ -100,9 +100,6 @@ const professionalServiceSchema = {
       },
     ],
   },
-  sameAs: [
-    // Add social profile URLs here when available
-  ],
 };
 
 interface MarketingLayoutProps {
