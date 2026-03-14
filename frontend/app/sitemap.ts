@@ -13,7 +13,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return INDEXABLE_PAGES.flatMap(({ path, priority, changeFrequency }) =>
     locales.map((locale) => ({
       url: `${siteUrl}/${locale}${path}`,
-      lastModified: new Date(),
       changeFrequency,
       priority,
       alternates: {
