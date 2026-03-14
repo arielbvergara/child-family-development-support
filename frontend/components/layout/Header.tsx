@@ -37,9 +37,7 @@ export function Header({ locale }: HeaderProps) {
 
   useEffect(() => {
     function updateHash() {
-      if (typeof window !== 'undefined') {
-        setCurrentHash(window.location.hash);
-      }
+      setCurrentHash(window.location.hash);
     }
 
     // Set the initial hash after mount and whenever the pathname changes
