@@ -12,7 +12,7 @@ export function Footer({ locale }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-sage-200 bg-warm-900 text-warm-300">
+    <footer className="border-t border-border bg-warm-900 text-warm-300">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand column */}
