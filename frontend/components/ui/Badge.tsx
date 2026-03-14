@@ -17,7 +17,6 @@ interface BadgeProps {
   variant?: Variant;
 }
 
-
 export function Badge({ children, className, variant = 'sage' }: BadgeProps) {
   return (
     <span
