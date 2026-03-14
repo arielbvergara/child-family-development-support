@@ -14,7 +14,7 @@ export function Card({ children, className, hover = false }: CardProps) {
         clsx(
           'rounded-2xl bg-surface p-6 shadow-sm border border-border',
           hover &&
-            'transition-all duration-200 hover:shadow-lg hover:-translate-y-1',
+            'transition-[box-shadow,transform] duration-200 hover:shadow-lg hover:-translate-y-1',
           className
         )
       )}
