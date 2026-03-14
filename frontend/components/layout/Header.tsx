@@ -27,8 +27,6 @@ export function Header({ locale }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [currentHash, setCurrentHash] = useState('');
 
-
-
   useEffect(() => {
     function onScroll() {
       setIsScrolled(window.scrollY > 10);
