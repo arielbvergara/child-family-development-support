@@ -55,7 +55,7 @@ export default withSentryConfig(withNextIntl(nextConfig), {
   org: 'arielbvergara',
   project: 'child-support-frontend',
   // Suppresses the Sentry build-time telemetry banner in CI logs.
-  silent: !process.env.CI,
+  silent: !!process.env.CI,
   // Disable the Sentry webpack plugin's source map upload in development
   // to keep local builds fast; uploads only happen in CI/production.
   sourcemaps: {
