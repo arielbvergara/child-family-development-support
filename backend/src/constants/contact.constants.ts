@@ -6,7 +6,8 @@ export const CONTACT_VALIDATION = {
   PHONE_MAX_LENGTH: 20,
   SERVICE_MAX_LENGTH: 100,
   MESSAGE_MAX_LENGTH: 2000,
-  // Simple heuristic email check: requires a TLD with at least 2 alphabetic characters (not fully RFC-compliant)
+  // Simplified email validation heuristic: checks for a local part, domain, and a TLD of at least
+  // 2 alphabetic characters. Does not cover all valid formats (e.g. IDN/punycode TLDs like xn--...).
   EMAIL_REGEX: /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/,
 } as const;
 
