@@ -2,8 +2,12 @@ export const CONTACT_OWNER_EMAIL = 'info@pedagogischadvies.nl';
 
 export const CONTACT_VALIDATION = {
   NAME_MAX_LENGTH: 100,
+  EMAIL_MAX_LENGTH: 254,
+  PHONE_MAX_LENGTH: 20,
+  SERVICE_MAX_LENGTH: 100,
   MESSAGE_MAX_LENGTH: 2000,
-  EMAIL_REGEX: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  // RFC 5321-compliant: requires a proper TLD with at least 2 alphabetic characters
+  EMAIL_REGEX: /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/,
 } as const;
 
 export const HTTP_STATUS = {
@@ -13,6 +17,9 @@ export const HTTP_STATUS = {
 } as const;
 
 export const CONTACT_ROUTE_PATH = '/contact';
+
+export const CONTACT_RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000; // 15 minutes
+export const CONTACT_RATE_LIMIT_MAX = 5; // max 5 submissions per window per IP
 
 export const SHEETS_RANGE = 'A:F';
 export const SHEETS_SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
