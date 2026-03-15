@@ -8,8 +8,8 @@
   },
   "hero": {
     "headline": "Wachstum begleiten, eine Familie nach der anderen",
-    "subheadline": "Professionelle pädagogische Unterstützung für Kinder und Familien, die das Beste für ihre Kinder wollen.",
-    "ctaPrimary": "Termin vereinbaren",
+    "subheadline": "Kämpft Ihr Kind mit Entwicklungs-, Verhaltens- oder Schulproblemen? Ich helfe Familien, praktische, fachkundige Lösungen zu finden — online oder persönlich.",
+    "ctaPrimary": "Kostenloses Erstgespräch",
     "ctaSecondary": "Leistungen entdecken",
     "onlineBadge": "Online",
     "inPersonBadge": "Persönlich",
@@ -56,12 +56,12 @@
   },
   "testimonials": {
     "1": {
-      "quote": "Die Begleitung hat unserer Familie wirklich geholfen. Wir verstehen unsere Tochter jetzt viel besser und die Kommunikation zuhause hat sich enorm verbessert.",
+      "quote": "Innerhalb von 3 Sitzungen hat sich die Kommunikation zu Hause grundlegend verändert. Wir verstehen unsere Tochter jetzt viel besser — weniger Konflikte, mehr Verbindung.",
       "author": "Marieke V.",
       "role": "Mutter zweier Kinder"
     },
     "2": {
-      "quote": "Professionell, herzlich und immer erreichbar für Fragen. Der Workshop zum Thema Grenzen setzen war für uns sehr aufschlussreich.",
+      "quote": "Der Workshop zum Grenzen setzen war ein Wendepunkt. An einem Nachmittag haben wir endlich einen Ansatz gefunden, der mit unserem 6-jährigen Kind wirklich funktioniert.",
       "author": "Thomas & Lena B.",
       "role": "Eltern"
     }
@@ -76,6 +76,32 @@
     "headline": "Bereit für den ersten Schritt?",
     "subheadline": "Nehmen Sie heute Kontakt auf für ein unverbindliches Erstgespräch.",
     "button": "Kontakt aufnehmen"
+  },
+  "faq": {
+    "sectionTitle": "Häufig gestellte Fragen",
+    "sectionSubtitle": "Alles, was Sie wissen möchten, bevor Sie Kontakt aufnehmen",
+    "items": {
+      "1": {
+        "question": "Was kosten die Sitzungen?",
+        "answer": "Die Preise variieren je nach Leistung und ob sie online oder vor Ort stattfinden. Kontaktieren Sie mich für ein persönliches Angebot — das Erstgespräch ist immer kostenlos."
+      },
+      "2": {
+        "question": "Ich bin unsicher, welche Leistung für uns geeignet ist. Können Sie helfen?",
+        "answer": "Selbstverständlich. Im kostenlosen Erstgespräch besprechen wir Ihre Situation und ich empfehle den passenden Ansatz. Sie gehen keinerlei Verpflichtung ein."
+      },
+      "3": {
+        "question": "Arbeiten Sie online oder nur vor Ort?",
+        "answer": "Beides. Einzelberatungen, Gruppenworkshops und Schulbegleitung sind online verfügbar. Kinderbeurteilungen finden ausschließlich vor Ort statt."
+      },
+      "4": {
+        "question": "Wie schnell bekomme ich einen Termin?",
+        "answer": "Ich antworte in der Regel innerhalb von 24 Stunden und kann meist innerhalb weniger Tage ein Erstgespräch vereinbaren."
+      },
+      "5": {
+        "question": "Mit welchen Altersgruppen arbeiten Sie?",
+        "answer": "Ich arbeite mit Kindern von der frühen Kindheit bis zur Adoleszenz sowie mit ihren Familien und Erziehern während dieser gesamten Zeit."
+      }
+    }
   },
   "about": {
     "pageTitle": "Über mich",
@@ -148,6 +174,7 @@
       "messagePlaceholder": "Erzählen Sie mir kurz von Ihrer Situation oder Ihrer Frage...",
       "submit": "Nachricht senden",
       "submitting": "Senden...",
+      "responseTime": "Ich melde mich innerhalb von 24 Stunden an Werktagen bei Ihnen.",
       "privacy": "Ihre Daten werden vertraulich behandelt und niemals an Dritte weitergegeben.",
       "successTitle": "Nachricht erhalten!",
       "successMessage": "Vielen Dank für Ihre Nachricht. Ich melde mich so bald wie möglich bei Ihnen.",

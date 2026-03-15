@@ -158,6 +158,16 @@ export function Header({ locale }: HeaderProps) {
               {t('nav.bookConsultation')}
             </Button>
 
+            {/* Mobile CTA — visible on small screens before the hamburger */}
+            <Button
+              href={`/${locale}/contact`}
+              variant="primary"
+              size="sm"
+              className="inline-flex md:hidden"
+            >
+              {t('hero.ctaPrimary')}
+            </Button>
+
             {/* Mobile hamburger */}
             <button
               onClick={() => setIsMenuOpen(true)}

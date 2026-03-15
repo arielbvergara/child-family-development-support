@@ -8,8 +8,8 @@
   },
   "hero": {
     "headline": "Nurturing Growth, One Family at a Time",
-    "subheadline": "Personalized child development support for families who want the best for their children.",
-    "ctaPrimary": "Book a Consultation",
+    "subheadline": "Is your child struggling with development, behavior, or school challenges? I help families find practical, expert solutions — online or in person.",
+    "ctaPrimary": "Book a Free Call",
     "ctaSecondary": "Explore Services",
     "onlineBadge": "Online",
     "inPersonBadge": "In Person",
@@ -56,12 +56,12 @@
   },
   "testimonials": {
     "1": {
-      "quote": "The support truly helped our family. We understand our daughter so much better now, and communication at home has improved enormously.",
+      "quote": "Within 3 sessions, communication at home transformed completely. We understand our daughter so much better now — fewer conflicts, more connection.",
       "author": "Marieke V.",
       "role": "Mother of two"
     },
     "2": {
-      "quote": "Professional, warm, and always available for questions. The workshop on setting boundaries was an eye-opener for us.",
+      "quote": "The boundary-setting workshop was a turning point. In one afternoon we finally had a framework that actually works with our 6-year-old.",
       "author": "Thomas & Lena B.",
       "role": "Parents"
     }
@@ -76,6 +76,32 @@
     "headline": "Ready to Take the First Step?",
     "subheadline": "Get in touch today for a free introductory conversation.",
     "button": "Get in Touch"
+  },
+  "faq": {
+    "sectionTitle": "Frequently Asked Questions",
+    "sectionSubtitle": "Everything you need to know before reaching out",
+    "items": {
+      "1": {
+        "question": "How much do sessions cost?",
+        "answer": "Session rates vary depending on the service and whether it is online or in person. Contact me for a personalized quote — the introductory call is always free."
+      },
+      "2": {
+        "question": "I'm not sure which service is right for us. Can you help?",
+        "answer": "Absolutely. During the free introductory call we discuss your situation and I recommend the most suitable approach. There is no pressure to commit."
+      },
+      "3": {
+        "question": "Do you work online or only in person?",
+        "answer": "Both. Individual consultations, group workshops, and school support are available online. Child assessments are conducted in person only."
+      },
+      "4": {
+        "question": "How quickly can I get an appointment?",
+        "answer": "I typically respond within 24 hours and can usually schedule an introductory call within a few days."
+      },
+      "5": {
+        "question": "What ages do you work with?",
+        "answer": "I work with children from early childhood through adolescence, and with their families and educators throughout that journey."
+      }
+    }
   },
   "about": {
     "pageTitle": "About Me",
@@ -148,6 +174,7 @@
       "messagePlaceholder": "Tell me briefly about your situation or question...",
       "submit": "Send Message",
       "submitting": "Sending...",
+      "responseTime": "I'll get back to you within 24 hours on business days.",
       "privacy": "Your details are treated confidentially and never shared with third parties.",
       "successTitle": "Message received!",
       "successMessage": "Thank you for your message. I will get back to you as soon as possible.",

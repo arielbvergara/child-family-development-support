@@ -8,8 +8,8 @@
   },
   "hero": {
     "headline": "Groei begeleiden, één gezin tegelijk",
-    "subheadline": "Professionele pedagogische ondersteuning voor kinderen en gezinnen die het beste willen voor hun kinderen.",
-    "ctaPrimary": "Maak een afspraak",
+    "subheadline": "Heeft uw kind moeite met ontwikkeling, gedrag of schoolproblemen? Ik help gezinnen met praktische, deskundige oplossingen — online of persoonlijk.",
+    "ctaPrimary": "Gratis kennismakingsgesprek",
     "ctaSecondary": "Bekijk de diensten",
     "onlineBadge": "Online",
     "inPersonBadge": "Persoonlijk",
@@ -56,12 +56,12 @@
   },
   "testimonials": {
     "1": {
-      "quote": "De begeleiding heeft ons gezin echt geholpen. We begrijpen onze dochter nu veel beter en de communicatie thuis is enorm verbeterd.",
+      "quote": "Binnen 3 sessies veranderde de communicatie thuis compleet. We begrijpen onze dochter nu veel beter — minder conflicten, meer verbinding.",
       "author": "Marieke V.",
       "role": "Moeder van twee kinderen"
     },
     "2": {
-      "quote": "Professioneel, warm en altijd beschikbaar voor vragen. De workshop over grenzen stellen was een eye-opener voor ons.",
+      "quote": "De workshop over grenzen stellen was een keerpunt. In één middag kregen we eindelijk een aanpak die echt werkt met ons 6-jarige kind.",
       "author": "Thomas & Lena B.",
       "role": "Ouders"
     }
@@ -76,6 +76,32 @@
     "headline": "Klaar voor de eerste stap?",
     "subheadline": "Neem vandaag contact op voor een vrijblijvend kennismakingsgesprek.",
     "button": "Neem contact op"
+  },
+  "faq": {
+    "sectionTitle": "Veelgestelde vragen",
+    "sectionSubtitle": "Alles wat u wilt weten voordat u contact opneemt",
+    "items": {
+      "1": {
+        "question": "Wat kosten de sessies?",
+        "answer": "De tarieven variëren per dienst en of het online of persoonlijk is. Neem contact op voor een persoonlijke offerte — het kennismakingsgesprek is altijd gratis."
+      },
+      "2": {
+        "question": "Ik weet niet welke dienst bij ons past. Kunt u helpen?",
+        "answer": "Zeker. Tijdens het gratis kennismakingsgesprek bespreken we uw situatie en geef ik een aanbeveling voor de meest geschikte aanpak. U bent nergens toe verplicht."
+      },
+      "3": {
+        "question": "Werkt u online of alleen persoonlijk?",
+        "answer": "Beide. Individuele consulten, groepsworkshops en schoolbegeleiding zijn online beschikbaar. Kinderbeoordelingen vinden alleen persoonlijk plaats."
+      },
+      "4": {
+        "question": "Hoe snel kan ik een afspraak maken?",
+        "answer": "Ik reageer doorgaans binnen 24 uur en kan meestal binnen enkele dagen een kennismakingsgesprek inplannen."
+      },
+      "5": {
+        "question": "Met welke leeftijden werkt u?",
+        "answer": "Ik werk met kinderen van de vroege jeugd tot en met de adolescentie, en met hun gezinnen en opvoeders gedurende die hele periode."
+      }
+    }
   },
   "about": {
     "pageTitle": "Over mij",
@@ -148,6 +174,7 @@
       "messagePlaceholder": "Vertel me kort over uw situatie of vraag...",
       "submit": "Bericht versturen",
       "submitting": "Versturen...",
+      "responseTime": "Ik neem binnen 24 uur contact met u op op werkdagen.",
       "privacy": "Uw gegevens worden vertrouwelijk behandeld en nooit gedeeld met derden.",
       "successTitle": "Bericht ontvangen!",
       "successMessage": "Bedankt voor uw bericht. Ik neem zo snel mogelijk contact met u op.",

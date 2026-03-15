@@ -46,21 +46,13 @@ export function Hero({ locale }: HeroProps) {
           </p>
 
           {/* CTA buttons */}
-          <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+          <div className="mt-10 flex justify-center">
             <Button
               href={`/${locale}/contact`}
               variant="primary"
               size="lg"
             >
               {t('ctaPrimary')}
-            </Button>
-            <Button
-              href={`/${locale}#services`}
-              variant="ghost"
-              size="lg"
-            >
-              {t('ctaSecondary')}
-              <ArrowDown className="ml-1 h-4 w-4" aria-hidden="true" />
             </Button>
           </div>
 
