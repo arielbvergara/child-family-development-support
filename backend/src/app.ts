@@ -8,6 +8,11 @@ import { CONTACT_RATE_LIMIT_MAX, CONTACT_RATE_LIMIT_WINDOW_MS, CONTACT_ROUTE_PAT
 
 const app: Application = express();
 
+// Trust the first hop from a reverse proxy/load balancer so that
+// express-rate-limit resolves the real client IP from X-Forwarded-For
+// rather than the proxy address, preventing all clients sharing one bucket.
+app.set('trust proxy', 1);
+
 const allowedOriginsRaw = process.env.ALLOWED_ORIGINS ?? '';
 if (!allowedOriginsRaw && process.env.NODE_ENV === 'production') {
   throw new Error('FATAL: ALLOWED_ORIGINS is not configured. The application cannot start in production without allowed origins.');
