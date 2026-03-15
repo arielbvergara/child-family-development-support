@@ -196,6 +196,7 @@ export function ContactForm() {
         </Button>
         <p className="text-xs text-warm-500">{t('privacy')}</p>
       </div>
+      <p className="text-xs text-warm-500">{t('responseTime')}</p>
 
       {hasError && (
         <p role="alert" className="text-sm text-red-600">

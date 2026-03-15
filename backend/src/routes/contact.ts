@@ -32,8 +32,24 @@ function validateContactBody(body: ContactRequestBody): {
 
   if (!email) {
     errors.push({ field: 'email', message: 'Email is required' });
+  } else if (email.length > CONTACT_VALIDATION.EMAIL_MAX_LENGTH) {
+    errors.push({ field: 'email', message: 'Email address is too long' });
   } else if (!CONTACT_VALIDATION.EMAIL_REGEX.test(email)) {
     errors.push({ field: 'email', message: 'Email must be a valid email address' });
+  }
+
+  if (phone && phone.length > CONTACT_VALIDATION.PHONE_MAX_LENGTH) {
+    errors.push({
+      field: 'phone',
+      message: `Phone number must not exceed ${CONTACT_VALIDATION.PHONE_MAX_LENGTH} characters`,
+    });
+  }
+
+  if (service && service.length > CONTACT_VALIDATION.SERVICE_MAX_LENGTH) {
+    errors.push({
+      field: 'service',
+      message: `Service selection must not exceed ${CONTACT_VALIDATION.SERVICE_MAX_LENGTH} characters`,
+    });
   }
 
   if (!message) {
@@ -90,10 +106,16 @@ export function createContactRouter(): IRouter {
       ]);
 
       if (results[0].status === 'rejected') {
-        console.error('Failed to send contact emails:', results[0].reason);
+        const reason = results[0].reason;
+        console.error('Failed to send contact notification email', {
+          err: reason instanceof Error ? reason.message : String(reason),
+        });
       }
       if (results[1].status === 'rejected') {
-        console.error('Failed to append to Google Sheets:', results[1].reason);
+        const reason = results[1].reason;
+        console.error('Failed to save contact submission to Google Sheets', {
+          err: reason instanceof Error ? reason.message : String(reason),
+        });
       }
 
       res.status(HTTP_STATUS.OK).json({ success: true });
