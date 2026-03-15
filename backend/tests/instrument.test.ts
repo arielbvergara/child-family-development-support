@@ -51,4 +51,16 @@ describe('instrument', () => {
       expect.objectContaining({ environment: 'development' }),
     );
   });
+
+  it('SentryInit_ShouldNotCallInit_WhenDsnIsAbsent', async () => {
+    delete process.env.SENTRY_DSN;
+    await import('../src/instrument');
+    expect(mockInit).not.toHaveBeenCalled();
+  });
+
+  it('SentryInit_ShouldNotCallInit_WhenDsnIsEmptyString', async () => {
+    process.env.SENTRY_DSN = '';
+    await import('../src/instrument');
+    expect(mockInit).not.toHaveBeenCalled();
+  });
 });
