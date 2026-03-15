@@ -34,8 +34,9 @@ async function getAccessToken(serviceAccountEmail: string, privateKeyPem: string
   });
 
   if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`Google OAuth token exchange failed: ${text}`);
+    const errorText = await response.text();
+    console.error('Google OAuth token exchange failed:', errorText);
+    throw new Error('Authentication service unavailable');
   }
 
   const json = (await response.json()) as { access_token: string };
@@ -73,8 +74,9 @@ export function createSheetsService(
     });
 
     if (!response.ok) {
-      const text = await response.text();
-      throw new Error(`Google Sheets API error: ${text}`);
+      const errorText = await response.text();
+      console.error('Google Sheets API error:', errorText);
+      throw new Error('Failed to save contact submission');
     }
   }
 

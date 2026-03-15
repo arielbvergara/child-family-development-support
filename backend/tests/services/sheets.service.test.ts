@@ -105,7 +105,7 @@ describe('createSheetsService', () => {
 
     const service = createSheetsService('sa@project.iam.gserviceaccount.com', 'key', 'sheet-id');
     await expect(service.appendContactSubmission(validPayload)).rejects.toThrow(
-      'Google Sheets API error',
+      'Failed to save contact submission',
     );
   });
 });
