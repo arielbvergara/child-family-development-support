@@ -7,6 +7,7 @@ import {
   SLOT_DURATION_MINUTES,
   WORKING_SCHEDULE,
   AVAILABILITY_CACHE_TTL_MS,
+  BUSINESS_TIMEZONE,
 } from '../constants/appointment.constants';
 
 async function getAccessToken(serviceAccountEmail: string, privateKeyPem: string): Promise<string> {
@@ -48,23 +49,100 @@ async function getAccessToken(serviceAccountEmail: string, privateKeyPem: string
 }
 
 /**
- * Generates all candidate 60-minute slots within working hours for a given date.
- * Returns slot start times as Date objects.
+ * Returns the day of week (0 = Sunday … 6 = Saturday) for a given Date as it
+ * appears in the specified IANA timezone. Uses numeric date parts to derive the
+ * day, avoiding reliance on locale-specific weekday strings which vary across
+ * Node.js ICU builds.
+ */
+function getDayOfWeekInTimezone(date: Date, timezone: string): number {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: timezone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(date);
+  const get = (type: string) => parseInt(parts.find((p) => p.type === type)!.value, 10);
+  return new Date(get('year'), get('month') - 1, get('day')).getDay();
+}
+
+/**
+ * Creates a UTC Date representing a specific hour:minute on the calendar day
+ * of `dateRef` as seen in the given IANA timezone. Uses a two-pass offset
+ * correction to handle DST transition boundaries correctly.
+ *
+ * Example: createSlotInTimezone(mondayDate, 9, 0, 'Europe/Amsterdam')
+ *   → returns a Date whose UTC value is 08:00 in winter (CET, UTC+1) or
+ *     07:00 in summer (CEST, UTC+2), so it always represents 09:00 Amsterdam.
+ */
+export function createSlotInTimezone(
+  dateRef: Date,
+  hour: number,
+  minute: number,
+  timezone: string,
+): Date {
+  // Step 1: Get "YYYY-MM-DD" in the target timezone (en-CA locale gives ISO-date format)
+  const ymd = new Intl.DateTimeFormat('en-CA', { timeZone: timezone }).format(dateRef);
+  const hh = String(hour).padStart(2, '0');
+  const mm = String(minute).padStart(2, '0');
+
+  // Step 2: Treat the target local time as UTC to get a rough approximation
+  const approx = new Date(`${ymd}T${hh}:${mm}:00.000Z`);
+
+  // Step 3: Determine what time the target timezone displays for that approximate UTC
+  const formatParts = (d: Date) =>
+    new Intl.DateTimeFormat('en-US', {
+      timeZone: timezone,
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
+      hour12: false,
+    }).formatToParts(d);
+
+  const get = (parts: Intl.DateTimeFormatPart[], type: string) =>
+    parseInt(parts.find((p) => p.type === type)!.value, 10);
+
+  const approxParts = formatParts(approx);
+  const tzMs = Date.UTC(
+    get(approxParts, 'year'), get(approxParts, 'month') - 1, get(approxParts, 'day'),
+    get(approxParts, 'hour'), get(approxParts, 'minute'), get(approxParts, 'second'),
+  );
+
+  // offsetMs: positive means timezone is behind UTC (e.g. UTC-1 → +3600000)
+  const offsetMs = approx.getTime() - tzMs;
+  const corrected = new Date(approx.getTime() + offsetMs);
+
+  // Step 4: Verify the corrected time shows the expected hour:minute in the timezone.
+  // If not (can happen at DST transitions), recalculate offset from the corrected time.
+  const correctedParts = formatParts(corrected);
+  if (get(correctedParts, 'hour') !== hour || get(correctedParts, 'minute') !== minute) {
+    const corrTzMs = Date.UTC(
+      get(correctedParts, 'year'), get(correctedParts, 'month') - 1, get(correctedParts, 'day'),
+      get(correctedParts, 'hour'), get(correctedParts, 'minute'), get(correctedParts, 'second'),
+    );
+    const corrOffsetMs = corrected.getTime() - corrTzMs;
+    return new Date(corrected.getTime() + (offsetMs - corrOffsetMs));
+  }
+
+  return corrected;
+}
+
+/**
+ * Generates all candidate 60-minute slots within working hours for a given date,
+ * using the business's IANA timezone so that 09:00 always means Amsterdam local
+ * time regardless of the server runtime timezone.
  */
 function generateSlotsForDate(date: Date): Date[] {
-  const dayOfWeek = date.getDay();
+  const dayOfWeek = getDayOfWeekInTimezone(date, BUSINESS_TIMEZONE);
   const schedule = WORKING_SCHEDULE.find((s) => (s.days as readonly number[]).includes(dayOfWeek));
   if (!schedule) return [];
 
   const [startHour, startMin] = schedule.start.split(':').map(Number);
   const [endHour, endMin] = schedule.end.split(':').map(Number);
 
-  const slots: Date[] = [];
-  const cursor = new Date(date);
-  cursor.setHours(startHour, startMin, 0, 0);
+  const startTime = createSlotInTimezone(date, startHour, startMin, BUSINESS_TIMEZONE);
+  const endTime = createSlotInTimezone(date, endHour, endMin, BUSINESS_TIMEZONE);
 
-  const endTime = new Date(date);
-  endTime.setHours(endHour, endMin, 0, 0);
+  const slots: Date[] = [];
+  const cursor = new Date(startTime);
 
   while (cursor.getTime() + SLOT_DURATION_MINUTES * 60 * 1000 <= endTime.getTime()) {
     slots.push(new Date(cursor));

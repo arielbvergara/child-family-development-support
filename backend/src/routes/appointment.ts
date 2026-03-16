@@ -1,10 +1,16 @@
 import { Router, type IRouter } from 'express';
 import type { Request, Response } from 'express';
+import rateLimit from 'express-rate-limit';
 import { createCalendarService, generateAllWorkingSlots } from '../services/calendar.service';
 import { createEmailService } from '../services/email.service';
 import {
   BOOKING_WINDOW_MONTHS,
   APPOINTMENT_VALIDATION,
+  APPOINTMENT_RATE_LIMIT_MAX,
+  APPOINTMENT_RATE_LIMIT_WINDOW_MS,
+  BUSINESS_TIMEZONE,
+  WORKING_SCHEDULE,
+  SLOT_DURATION_MINUTES,
 } from '../constants/appointment.constants';
 import { CONTACT_VALIDATION, HTTP_STATUS } from '../constants/contact.constants';
 import type {
@@ -12,6 +18,36 @@ import type {
   ValidatedAppointmentPayload,
 } from '../types/appointment.types';
 import type { ValidationError } from '../types/contact.types';
+
+/**
+ * Returns the local hour, minute, and day-of-week (0=Sun…6=Sat) for a Date
+ * as seen in the given IANA timezone. Uses numeric date parts only (no string
+ * weekday names) to avoid variation across Node.js ICU builds.
+ */
+function getTimePartsInTimezone(
+  date: Date,
+  timezone: string,
+): { hour: number; minute: number; dayOfWeek: number } {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: timezone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).formatToParts(date);
+
+  const get = (type: string) => parseInt(parts.find((p) => p.type === type)!.value, 10);
+  const year = get('year');
+  const month = get('month'); // 1-indexed
+  const day = get('day');
+
+  // Derive day of week from the local date components — immune to ICU weekday format differences
+  const dayOfWeek = new Date(year, month - 1, day).getDay();
+
+  return { hour: get('hour'), minute: get('minute'), dayOfWeek };
+}
 
 function validateAppointmentBody(body: AppointmentRequestBody): {
   payload: ValidatedAppointmentPayload | null;
@@ -56,10 +92,42 @@ function validateAppointmentBody(body: AppointmentRequestBody): {
     errors.push({ field: 'datetime', message: 'Appointment date and time is required' });
   } else {
     const parsed = new Date(datetime);
+
     if (isNaN(parsed.getTime())) {
       errors.push({ field: 'datetime', message: 'Appointment date and time must be a valid ISO 8601 date' });
     } else if (parsed <= new Date()) {
       errors.push({ field: 'datetime', message: 'Appointment must be scheduled in the future' });
+    } else {
+      // Booking window check: must not exceed the same window used by /availability
+      const bookingWindowEnd = new Date();
+      bookingWindowEnd.setMonth(bookingWindowEnd.getMonth() + BOOKING_WINDOW_MONTHS);
+      if (parsed > bookingWindowEnd) {
+        errors.push({ field: 'datetime', message: `Appointment must be within ${BOOKING_WINDOW_MONTHS} months from today` });
+      } else {
+        // Working-hours check: day and time must align with WORKING_SCHEDULE in business timezone
+        const { hour, minute, dayOfWeek } = getTimePartsInTimezone(parsed, BUSINESS_TIMEZONE);
+        const schedule = WORKING_SCHEDULE.find((s) =>
+          (s.days as readonly number[]).includes(dayOfWeek),
+        );
+
+        if (!schedule) {
+          errors.push({ field: 'datetime', message: 'No appointments are available on this day' });
+        } else {
+          const [schedStartHour, schedStartMin] = schedule.start.split(':').map(Number);
+          const [schedEndHour, schedEndMin] = schedule.end.split(':').map(Number);
+          const slotMinutes = hour * 60 + minute;
+          const schedStartMinutes = schedStartHour * 60 + schedStartMin;
+          const schedEndMinutes = schedEndHour * 60 + schedEndMin;
+
+          if (
+            slotMinutes < schedStartMinutes ||
+            slotMinutes + SLOT_DURATION_MINUTES > schedEndMinutes ||
+            (slotMinutes - schedStartMinutes) % SLOT_DURATION_MINUTES !== 0
+          ) {
+            errors.push({ field: 'datetime', message: 'Selected time is not a valid appointment slot' });
+          }
+        }
+      }
     }
   }
 
@@ -72,6 +140,17 @@ function validateAppointmentBody(body: AppointmentRequestBody): {
 
 export function createAppointmentRouter(): IRouter {
   const router = Router();
+
+  // Rate limiter scoped to POST only — GET /availability must not be throttled
+  // since it is called on every page load.
+  const bookingRateLimit = rateLimit({
+    windowMs: APPOINTMENT_RATE_LIMIT_WINDOW_MS,
+    max: APPOINTMENT_RATE_LIMIT_MAX,
+    message: { error: 'Too many requests, please try again later.' },
+    standardHeaders: true,
+    legacyHeaders: false,
+    skip: () => process.env.NODE_ENV === 'test',
+  });
 
   const calendarService =
     process.env.GOOGLE_CALENDAR_ID &&
@@ -116,6 +195,7 @@ export function createAppointmentRouter(): IRouter {
 
   router.post(
     '/',
+    bookingRateLimit,
     async (req: Request<object, object, AppointmentRequestBody>, res: Response) => {
       const { payload, errors } = validateAppointmentBody(req.body as AppointmentRequestBody);
 
@@ -124,14 +204,24 @@ export function createAppointmentRouter(): IRouter {
         return;
       }
 
-      // Re-check slot availability to guard against race conditions
+      // Re-check slot availability to guard against race conditions.
+      // null = check itself failed (transient error) → 503 so client can retry.
       if (calendarService) {
-        const available = await calendarService.isSlotAvailable(payload!.datetime).catch((err) => {
-          console.error('Availability re-check failed', {
-            err: err instanceof Error ? err.message : String(err),
+        const available: boolean | null = await calendarService
+          .isSlotAvailable(payload!.datetime)
+          .catch((err) => {
+            console.error('Availability re-check failed', {
+              err: err instanceof Error ? err.message : String(err),
+            });
+            return null;
           });
-          return true; // Allow booking if availability check itself fails
-        });
+
+        if (available === null) {
+          res.status(HTTP_STATUS.SERVICE_UNAVAILABLE).json({
+            error: 'Service temporarily unavailable. Please try again.',
+          });
+          return;
+        }
 
         if (!available) {
           res.status(HTTP_STATUS.UNPROCESSABLE_ENTITY).json({

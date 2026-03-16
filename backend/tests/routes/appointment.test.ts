@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { Resend } from 'resend';
 import app from '../../src/app';
-import { APPOINTMENT_VALIDATION } from '../../src/constants/appointment.constants';
+import { APPOINTMENT_VALIDATION, BOOKING_WINDOW_MONTHS } from '../../src/constants/appointment.constants';
 import { CONTACT_VALIDATION } from '../../src/constants/contact.constants';
 
 jest.mock('resend');
@@ -25,11 +25,22 @@ const mockSend = jest.fn();
   () => ({ emails: { send: mockSend } }) as unknown as Resend,
 );
 
-/** Returns next Monday at the given hour */
+/** Returns next Monday at the given UTC hour */
 function nextMonday(hour = 10): Date {
   const d = new Date();
   d.setDate(d.getDate() + ((8 - d.getDay()) % 7 || 7));
   d.setHours(hour, 0, 0, 0);
+  return d;
+}
+
+/**
+ * Returns next Monday at 08:00 UTC, which equals 09:00 Amsterdam CET (UTC+1).
+ * This is the earliest valid working slot for a weekday.
+ */
+function nextMondayValidSlot(): Date {
+  const d = new Date();
+  d.setDate(d.getDate() + ((8 - d.getDay()) % 7 || 7));
+  d.setUTCHours(8, 0, 0, 0); // 09:00 Amsterdam in winter (CET = UTC+1)
   return d;
 }
 
@@ -180,6 +191,73 @@ describe('POST /appointments', () => {
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ success: true });
+  });
+
+  it('createAppointment_ShouldReturn422_WhenDatetimeIsOutsideWorkingHours', async () => {
+    // Monday at 18:00 UTC = 19:00–20:00 Amsterdam (always outside 09:00–17:00 working hours)
+    const lateMonday = new Date(validBody.datetime);
+    lateMonday.setUTCHours(18, 0, 0, 0);
+
+    const res = await request(app)
+      .post('/appointments')
+      .send({ ...validBody, datetime: lateMonday.toISOString() });
+
+    expect(res.status).toBe(422);
+    expect(res.body.errors).toContainEqual(expect.objectContaining({ field: 'datetime' }));
+  });
+
+  it('createAppointment_ShouldReturn422_WhenDatetimeIsOnSunday', async () => {
+    // Compute next Sunday at 10:00 UTC using pure UTC arithmetic (+7-day buffer avoids
+    // near-midnight local/UTC date-boundary issues)
+    const d = new Date();
+    d.setUTCDate(d.getUTCDate() + 7); // ensure we're at least a week out
+    d.setUTCDate(d.getUTCDate() + (7 - d.getUTCDay()) % 7); // advance to next Sunday in UTC
+    d.setUTCHours(10, 0, 0, 0); // 10:00 UTC = 11:00 Amsterdam CET — looks like a valid slot time but Sunday
+
+    const res = await request(app)
+      .post('/appointments')
+      .send({ ...validBody, datetime: d.toISOString() });
+
+    expect(res.status).toBe(422);
+    expect(res.body.errors).toContainEqual(expect.objectContaining({ field: 'datetime' }));
+  });
+
+  it('createAppointment_ShouldReturn422_WhenDatetimeExceedsBookingWindow', async () => {
+    const tooFar = new Date();
+    tooFar.setMonth(tooFar.getMonth() + BOOKING_WINDOW_MONTHS + 1);
+
+    const res = await request(app)
+      .post('/appointments')
+      .send({ ...validBody, datetime: tooFar.toISOString() });
+
+    expect(res.status).toBe(422);
+    expect(res.body.errors).toContainEqual(expect.objectContaining({ field: 'datetime' }));
+  });
+
+  it('createAppointment_ShouldReturn503_WhenAvailabilityRecheckThrows', async () => {
+    process.env.GOOGLE_CALENDAR_ID = 'test-cal-id';
+    process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL = 'sa@test.iam.gserviceaccount.com';
+    process.env.GOOGLE_PRIVATE_KEY = 'test-key';
+
+    // Token succeeds, list-events call throws a network error
+    mockFetch
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ access_token: 'mock-token' }) })
+      .mockRejectedValueOnce(new Error('Network error'));
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let isolatedApp: any;
+    await jest.isolateModulesAsync(async () => {
+      const { default: freshApp } = await import('../../src/app');
+      isolatedApp = freshApp;
+    });
+
+    delete process.env.GOOGLE_CALENDAR_ID;
+    delete process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+    delete process.env.GOOGLE_PRIVATE_KEY;
+
+    const res = await request(isolatedApp).post('/appointments').send(validBody);
+
+    expect(res.status).toBe(503);
   });
 
   it('createAppointment_ShouldReturn422_WhenSlotIsUnavailable', async () => {

@@ -1,6 +1,7 @@
 import { Resend } from 'resend';
 import type { ValidatedContactPayload } from '../types/contact.types';
 import type { ValidatedAppointmentPayload } from '../types/appointment.types';
+import { BUSINESS_TIMEZONE } from '../constants/appointment.constants';
 
 function escapeHtml(str: string): string {
   return str
@@ -87,6 +88,7 @@ export function createEmailService(
     const safeDateTime = escapeHtml(new Date(payload.datetime).toLocaleString('nl-NL', {
       dateStyle: 'full',
       timeStyle: 'short',
+      timeZone: BUSINESS_TIMEZONE,
     }));
 
     const phoneLine = safePhone
@@ -125,6 +127,7 @@ export function createEmailService(
     const safeDateTime = escapeHtml(new Date(payload.datetime).toLocaleString('nl-NL', {
       dateStyle: 'full',
       timeStyle: 'short',
+      timeZone: BUSINESS_TIMEZONE,
     }));
 
     await resend.emails.send({

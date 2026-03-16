@@ -1,5 +1,5 @@
-import { createCalendarService, generateAllWorkingSlots } from '../../src/services/calendar.service';
-import { SLOT_DURATION_MINUTES } from '../../src/constants/appointment.constants';
+import { createCalendarService, generateAllWorkingSlots, createSlotInTimezone } from '../../src/services/calendar.service';
+import { SLOT_DURATION_MINUTES, BUSINESS_TIMEZONE } from '../../src/constants/appointment.constants';
 import type { ValidatedAppointmentPayload } from '../../src/types/appointment.types';
 
 jest.mock('node:crypto', () => {
@@ -316,6 +316,30 @@ describe('createCalendarService', () => {
 
       expect(result).toBe(false);
     });
+  });
+});
+
+describe('createSlotInTimezone', () => {
+  it('createSlotInTimezone_ShouldReturnCorrectUtcTime_WhenTimezoneIsAmsterdamWinter', () => {
+    // March 17 2026 is in CET (UTC+1). 09:00 Amsterdam = 08:00 UTC.
+    const date = new Date('2026-03-17T00:00:00.000Z'); // midnight UTC = 01:00 Amsterdam (same day)
+    const slot = createSlotInTimezone(date, 9, 0, BUSINESS_TIMEZONE);
+
+    expect(slot.getUTCHours()).toBe(8);
+    expect(slot.getUTCMinutes()).toBe(0);
+    expect(slot.getUTCFullYear()).toBe(2026);
+    expect(slot.getUTCMonth()).toBe(2); // March (0-indexed)
+    expect(slot.getUTCDate()).toBe(17);
+  });
+
+  it('createSlotInTimezone_ShouldReturnCorrectUtcTime_WhenTimezoneIsAmsterdamSummer', () => {
+    // July 14 2026 is in CEST (UTC+2). 09:00 Amsterdam = 07:00 UTC.
+    const date = new Date('2026-07-14T00:00:00.000Z');
+    const slot = createSlotInTimezone(date, 9, 0, BUSINESS_TIMEZONE);
+
+    expect(slot.getUTCHours()).toBe(7);
+    expect(slot.getUTCMinutes()).toBe(0);
+    expect(slot.getUTCDate()).toBe(14);
   });
 });
 

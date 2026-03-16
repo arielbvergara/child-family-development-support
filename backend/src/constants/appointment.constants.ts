@@ -19,6 +19,13 @@ export const APPOINTMENT_VALIDATION = {
   NOTES_MAX_LENGTH: 500,
 } as const;
 
+/**
+ * IANA timezone for the business. Used to interpret working-hour boundaries
+ * and format appointment datetimes in emails — ensures correct local times
+ * regardless of the server runtime timezone (which is UTC on Vercel).
+ */
+export const BUSINESS_TIMEZONE = 'Europe/Amsterdam';
+
 export const CALENDAR_SCOPES = ['https://www.googleapis.com/auth/calendar'] as const;
 export const CALENDAR_API_BASE = 'https://www.googleapis.com/calendar/v3';
 
