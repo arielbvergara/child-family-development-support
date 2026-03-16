@@ -12,7 +12,21 @@ export const NAV_LINKS: NavLink[] = [
   { labelKey: 'nav.services', href: '/#services' },
   { labelKey: 'nav.about', href: '/about' },
   { labelKey: 'nav.contact', href: '/contact' },
+  { labelKey: 'nav.bookConsultation', href: '/make-an-appointment' },
 ];
+
+/**
+ * Working schedule mirrored from the backend for display and slot validation purposes.
+ * dayOfWeek follows JS Date convention: 0 = Sunday, 1 = Monday, … 6 = Saturday.
+ */
+export const SCHEDULE_CONFIG = {
+  SLOT_DURATION_MINUTES: 60,
+  BOOKING_WINDOW_MONTHS: 2,
+  WORKING_SCHEDULE: [
+    { days: [1, 2, 3, 4, 5] as number[], start: '09:00', end: '17:00' },
+    { days: [6] as number[], start: '10:00', end: '14:00' },
+  ],
+} as const;
 
 export const SERVICES: Service[] = [
   {
