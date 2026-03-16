@@ -5,7 +5,9 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import healthRouter from './routes/health';
 import { createContactRouter } from './routes/contact';
+import { createAppointmentRouter } from './routes/appointment';
 import { CONTACT_RATE_LIMIT_MAX, CONTACT_RATE_LIMIT_WINDOW_MS, CONTACT_ROUTE_PATH } from './constants/contact.constants';
+import { APPOINTMENT_RATE_LIMIT_MAX, APPOINTMENT_RATE_LIMIT_WINDOW_MS, APPOINTMENT_ROUTE_PATH } from './constants/appointment.constants';
 
 /**
  * Factory that creates and fully configures the Express application.
@@ -42,7 +44,7 @@ export function createApp(configureRoutes?: (app: Application) => void): Applica
   app.use(
     cors({
       origin: allowedOrigins,
-      methods: ['POST'],
+      methods: ['GET', 'POST'],
       allowedHeaders: ['Content-Type'],
     }),
   );
@@ -61,6 +63,18 @@ export function createApp(configureRoutes?: (app: Application) => void): Applica
 
   app.use(CONTACT_ROUTE_PATH, contactRateLimit);
   app.use(CONTACT_ROUTE_PATH, createContactRouter());
+
+  const appointmentRateLimit = rateLimit({
+    windowMs: APPOINTMENT_RATE_LIMIT_WINDOW_MS,
+    max: APPOINTMENT_RATE_LIMIT_MAX,
+    message: { error: 'Too many requests, please try again later.' },
+    standardHeaders: true,
+    legacyHeaders: false,
+    skip: () => process.env.NODE_ENV === 'test',
+  });
+
+  app.use(APPOINTMENT_ROUTE_PATH, appointmentRateLimit);
+  app.use(APPOINTMENT_ROUTE_PATH, createAppointmentRouter());
 
   // Allow callers (e.g. tests) to register additional routes before error
   // handlers so thrown errors flow through the full error-handling pipeline.
