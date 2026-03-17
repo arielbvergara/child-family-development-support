@@ -293,5 +293,91 @@
       "prevMonth": "Vorheriger Monat",
       "nextMonth": "Nächster Monat"
     }
+  },
+  "servicePage": {
+    "individual": {
+      "tagline": "Persönliche Begleitung, abgestimmt auf Ihre Familiensituation",
+      "description": "In einer Einzelberatung steht ausschließlich Ihre spezifische Situation im Mittelpunkt. Ob Sie Fragen zur Entwicklung, zum Verhalten oder zu schulischen Herausforderungen Ihres Kindes haben — oder selbst als Elternteil Unterstützung benötigen — in diesen Sitzungen haben Sie den Raum, gemeinsam praktische Lösungen zu erarbeiten.",
+      "whatToExpect": {
+        "title": "Was Sie erwartet",
+        "item1": "Ein wertfreies, einfühlsames Gespräch über Ihre Situation",
+        "item2": "Praktische Einsichten und Werkzeuge, die Sie sofort anwenden können",
+        "item3": "Personalisierte Empfehlungen für das weitere Vorgehen"
+      },
+      "whoIsItFor": {
+        "title": "Für wen ist das?",
+        "text": "Eltern und Betreuungspersonen, die persönliche Begleitung suchen, Familien, die mit Verhaltens- oder Entwicklungsherausforderungen konfrontiert sind, und alle, die einen vertraulichen Raum suchen, um das Wohlbefinden ihres Kindes zu besprechen."
+      },
+      "videoTitle": "Einführung in die Einzelberatung",
+      "videoId": "QcpwEoW1uY8",
+      "cta": {
+        "title": "Bereit für den ersten Schritt?",
+        "text": "Buchen Sie ein kostenloses Erstgespräch — ganz unverbindlich.",
+        "button": "Kostenloses Erstgespräch"
+      }
+    },
+    "workshops": {
+      "tagline": "Gemeinsam lernen, teilen und wachsen",
+      "description": "Unsere Gruppenworkshops bringen Eltern und Betreuungspersonen in einem unterstützenden Rahmen zusammen, um Themen wie Kinderentwicklung, Erziehungsstrategien und Familiendynamik zu erkunden. Kleine Gruppengrößen stellen sicher, dass jeder Teilnehmende ausreichend Aufmerksamkeit und Raum für Fragen erhält.",
+      "whatToExpect": {
+        "title": "Was Sie erwartet",
+        "item1": "Interaktive Sitzungen mit anderen Eltern in kleiner Gruppe",
+        "item2": "Wissenschaftlich fundierte Strategien in verständlicher Sprache",
+        "item3": "Übungen und Materialien für die Weiterarbeit zu Hause"
+      },
+      "whoIsItFor": {
+        "title": "Für wen ist das?",
+        "text": "Eltern, die gerne in der Gruppe lernen, Betreuungspersonen, die den Austausch mit anderen in ähnlichen Situationen suchen, sowie Schulen oder Organisationen, die strukturierte Elternbegleitung anbieten möchten."
+      },
+      "videoTitle": "Über unsere Gruppenworkshops",
+      "videoId": "QcpwEoW1uY8",
+      "cta": {
+        "title": "Interesse an einem Workshop?",
+        "text": "Nehmen Sie Kontakt auf, um mehr über kommende Gruppensitzungen zu erfahren.",
+        "button": "Kontakt aufnehmen"
+      }
+    },
+    "assessment": {
+      "tagline": "Fundierte Einblicke in die Entwicklung und Stärken Ihres Kindes",
+      "description": "Eine professionelle Entwicklungsbeurteilung liefert ein klares, evidenzbasiertes Bild davon, wo Ihr Kind in seiner Entwicklung steht — seine Stärken, Entwicklungsbereiche und mögliche Faktoren, die von zusätzlicher Unterstützung profitieren könnten. Alle Beurteilungen finden persönlich statt.",
+      "whatToExpect": {
+        "title": "Was Sie erwartet",
+        "item1": "Eine gründliche, strukturierte Beobachtungs- und Bewertungssitzung",
+        "item2": "Ein ausführlicher schriftlicher Bericht mit Ergebnissen und Handlungsempfehlungen",
+        "item3": "Ein Nachgespräch zur Besprechung der Ergebnisse und Planung nächster Schritte"
+      },
+      "whoIsItFor": {
+        "title": "Für wen ist das?",
+        "text": "Eltern, die sich Sorgen um die Entwicklung ihres Kindes machen, Schulen oder Fachleute, die eine unabhängige Facheinschätzung suchen, und Familien, die Klarheit wünschen, bevor sie weitere Unterstützung in Anspruch nehmen."
+      },
+      "videoTitle": "Was ist eine Kinderbeurteilung?",
+      "videoId": "QcpwEoW1uY8",
+      "cta": {
+        "title": "Möchten Sie mehr erfahren?",
+        "text": "Nehmen Sie Kontakt auf, um zu besprechen, ob eine Beurteilung für Ihr Kind sinnvoll ist.",
+        "button": "Kontakt aufnehmen"
+      }
+    },
+    "school": {
+      "tagline": "Lehrkräfte stärken, um jedes Kind zu unterstützen",
+      "description": "Dieses Angebot richtet sich an pädagogische Fachkräfte — Lehrerinnen und Lehrer, Schulberater und Schulleitungen — die die vielfältigen Entwicklungsbedürfnisse ihrer Schülerinnen und Schüler besser verstehen und darauf eingehen möchten. Ich arbeite direkt mit Schulen zusammen, um Wissen, Sicherheit und praktische Strategien aufzubauen.",
+      "whatToExpect": {
+        "title": "Was Sie erwartet",
+        "item1": "Beratungen vor Ort oder online mit Lehrkräften und Schulteams",
+        "item2": "Praktische Strategien für Klassenmanagement und inklusiven Unterricht",
+        "item3": "Maßgeschneiderte Workshops und Schulungen für die spezifischen Bedürfnisse Ihrer Schule"
+      },
+      "whoIsItFor": {
+        "title": "Für wen ist das?",
+        "text": "Lehrkräfte, die mit Herausforderungen im Unterricht konfrontiert sind, Schulberater, die fachkundige Unterstützung suchen, sowie Bildungseinrichtungen, die ihre Unterstützung für Schülerinnen und Schüler mit Entwicklungs- oder Verhaltensbedarf stärken möchten."
+      },
+      "videoTitle": "Schul- und Lehrerbegleitung erklärt",
+      "videoId": "QcpwEoW1uY8",
+      "cta": {
+        "title": "Im Bildungsbereich tätig?",
+        "text": "Nehmen Sie Kontakt auf, um zu erkunden, wie ich Ihre Schule oder Ihr Team unterstützen kann.",
+        "button": "Kontakt aufnehmen"
+      }
+    }
   }
 }

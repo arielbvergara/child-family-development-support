@@ -39,10 +39,13 @@ export default function middleware(request: NextRequest): NextResponse {
     `script-src 'self' 'nonce-${nonce}'${isDev ? " 'unsafe-eval'" : ''}`,
     // Inline styles are still required by Tailwind CSS / Next.js.
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data:",
+    // Allow YouTube thumbnail images loaded by the embedded player.
+    "img-src 'self' data: https://i.ytimg.com",
     "font-src 'self'",
     // Allow fetch/XHR to the backend API and Sentry error reporting.
     `connect-src 'self' ${SENTRY_INGEST_ORIGIN}${apiOrigin ? ` ${apiOrigin}` : ''}`,
+    // Allow YouTube privacy-enhanced embeds on service pages.
+    "frame-src https://www.youtube-nocookie.com",
     // Disallow embedding this page in any frame (clickjacking protection).
     "frame-ancestors 'none'",
   ].join('; ');
