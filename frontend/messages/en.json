@@ -293,5 +293,91 @@
       "prevMonth": "Previous month",
       "nextMonth": "Next month"
     }
+  },
+  "servicePage": {
+    "individual": {
+      "tagline": "One-on-one support tailored to your family's unique needs",
+      "description": "In a private individual consultation, we focus entirely on your specific situation. Whether you have questions about your child's development, behavior, or school challenges — or whether you need guidance as a parent — these sessions give you the time and space to explore practical solutions together.",
+      "whatToExpect": {
+        "title": "What to Expect",
+        "item1": "A warm, non-judgmental conversation focused on your situation",
+        "item2": "Practical insights and tools you can apply right away",
+        "item3": "Personalized follow-up recommendations"
+      },
+      "whoIsItFor": {
+        "title": "Who Is This For?",
+        "text": "Parents and caregivers seeking personal guidance, families navigating behavioral or developmental challenges, and anyone looking for a confidential space to discuss their child's wellbeing."
+      },
+      "videoTitle": "Introduction to Individual Consultations",
+      "videoId": "dQw4w9WgXcQ",
+      "cta": {
+        "title": "Ready to Take the First Step?",
+        "text": "Book your free introductory call — no commitment required.",
+        "button": "Book a Free Call"
+      }
+    },
+    "workshops": {
+      "tagline": "Learn, share, and grow alongside other families",
+      "description": "Our group workshops bring together parents and caregivers in a supportive setting to explore topics in child development, parenting strategies, and family dynamics. Small group sizes ensure every participant receives meaningful attention and space to ask questions.",
+      "whatToExpect": {
+        "title": "What to Expect",
+        "item1": "Interactive sessions with fellow parents in a small group setting",
+        "item2": "Evidence-based strategies presented in accessible, practical language",
+        "item3": "Take-home exercises and tools to continue the work at home"
+      },
+      "whoIsItFor": {
+        "title": "Who Is This For?",
+        "text": "Parents who enjoy learning in a group setting, caregivers wanting to connect with others facing similar challenges, and schools or organizations looking to offer structured parenting support."
+      },
+      "videoTitle": "About Our Group Workshops",
+      "videoId": "dQw4w9WgXcQ",
+      "cta": {
+        "title": "Interested in a Workshop?",
+        "text": "Get in touch to find out about upcoming group sessions.",
+        "button": "Get in Touch"
+      }
+    },
+    "assessment": {
+      "tagline": "In-depth insight into your child's development and strengths",
+      "description": "A professional developmental assessment provides a clear, evidence-based picture of where your child is in their development — their strengths, areas for growth, and any factors that may benefit from additional support. All assessments are conducted in person.",
+      "whatToExpect": {
+        "title": "What to Expect",
+        "item1": "A thorough, structured observation and evaluation session",
+        "item2": "A detailed written report with findings and actionable recommendations",
+        "item3": "A follow-up consultation to discuss results and plan next steps"
+      },
+      "whoIsItFor": {
+        "title": "Who Is This For?",
+        "text": "Parents concerned about their child's development, schools or specialists seeking an independent professional assessment, and families wanting clarity before accessing further support services."
+      },
+      "videoTitle": "Understanding Child Assessments",
+      "videoId": "dQw4w9WgXcQ",
+      "cta": {
+        "title": "Want to Know More?",
+        "text": "Get in touch to discuss whether an assessment is right for your child.",
+        "button": "Get in Touch"
+      }
+    },
+    "school": {
+      "tagline": "Empowering educators to support every child's development",
+      "description": "This service is designed for educational professionals — teachers, school counselors, and administrators — who want to better understand and respond to the diverse developmental needs of their students. I work directly with schools to build knowledge, confidence, and practical strategies.",
+      "whatToExpect": {
+        "title": "What to Expect",
+        "item1": "On-site or online consultations with teaching staff and school teams",
+        "item2": "Practical strategies for classroom management and inclusive teaching",
+        "item3": "Tailored workshops and training sessions for your school's specific needs"
+      },
+      "whoIsItFor": {
+        "title": "Who Is This For?",
+        "text": "Teachers facing classroom challenges, school counselors seeking specialist input, and educational institutions looking to strengthen their support for students with developmental or behavioral needs."
+      },
+      "videoTitle": "School & Educator Support Explained",
+      "videoId": "dQw4w9WgXcQ",
+      "cta": {
+        "title": "Working in Education?",
+        "text": "Reach out to explore how I can support your school or team.",
+        "button": "Get in Touch"
+      }
+    }
   }
 }
