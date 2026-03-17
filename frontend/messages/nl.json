@@ -289,6 +289,7 @@
       "slotUnavailable": "Dit tijdslot is niet meer beschikbaar. Kies een ander tijdstip.",
       "loadingSlots": "Beschikbare tijdslots worden geladen…",
       "noSlotsAvailable": "Op dit moment zijn er geen beschikbare tijdslots. Neem direct contact op.",
+      "slotBooked": "Geboekt",
       "prevMonth": "Vorige maand",
       "nextMonth": "Volgende maand"
     }
