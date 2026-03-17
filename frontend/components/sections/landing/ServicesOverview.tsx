@@ -11,8 +11,12 @@ import {
 import { SectionWrapper } from '@/components/ui/SectionWrapper';
 import { Card } from '@/components/ui/Card';
 import { Heading } from '@/components/ui/Heading';
-import { SERVICES } from '@/lib/constants';
+import { SERVICES, SERVICE_PAGES } from '@/lib/constants';
 import Link from 'next/link';
+
+const serviceSlugMap = Object.fromEntries(
+  SERVICE_PAGES.map((s) => [s.id, s.slug])
+);
 
 const iconMap = {
   Users,
@@ -83,7 +87,7 @@ export function ServicesOverview({ locale }: ServicesOverviewProps) {
               </p>
 
               <Link
-                href={`/${locale}/contact`}
+                href={`/${locale}/services/${serviceSlugMap[service.id]}`}
                 className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-primary-hover"
               >
                 {t('services.learnMore')}
