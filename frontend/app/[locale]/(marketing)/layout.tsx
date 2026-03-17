@@ -20,7 +20,6 @@ const personStubSchema = {
   '@type': 'Person',
   '@id': `${SITE_CONFIG.siteUrl}/#person`,
   name: 'Pedagogisch Adviseur',
-  url: `${SITE_CONFIG.siteUrl}/about`,
   worksFor: { '@id': `${SITE_CONFIG.siteUrl}/#business` },
 };
 
