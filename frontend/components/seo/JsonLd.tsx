@@ -1,5 +1,3 @@
-import { headers } from 'next/headers';
-
 interface JsonLdProps {
   schema: Record<string, unknown>;
 }
@@ -7,17 +5,16 @@ interface JsonLdProps {
 /**
  * Renders a JSON-LD structured-data <script> tag.
  *
- * The nonce is read from the `x-nonce` request header injected by
- * middleware.ts so that the script passes the per-request nonce check
- * in the Content-Security-Policy header — required because the CSP
- * no longer allows `'unsafe-inline'` for scripts.
+ * JSON-LD scripts use type="application/ld+json" which marks them as data,
+ * not executable JavaScript. Browsers do not execute them, so they are not
+ * subject to the nonce check in script-src and do not require a nonce.
+ * Omitting the nonce also avoids a React hydration mismatch — browsers strip
+ * the nonce attribute from the DOM after use, causing server/client divergence.
  */
-export async function JsonLd({ schema }: JsonLdProps) {
-  const nonce = (await headers()).get('x-nonce') ?? undefined;
+export function JsonLd({ schema }: JsonLdProps) {
   return (
     <script
       type="application/ld+json"
-      nonce={nonce}
       dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
     />
   );
