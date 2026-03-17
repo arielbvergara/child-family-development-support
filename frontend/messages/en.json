@@ -289,6 +289,7 @@
       "slotUnavailable": "This time slot is no longer available. Please choose another.",
       "loadingSlots": "Loading available slots…",
       "noSlotsAvailable": "No available slots at this time. Please contact us directly.",
+      "slotBooked": "Booked",
       "prevMonth": "Previous month",
       "nextMonth": "Next month"
     }

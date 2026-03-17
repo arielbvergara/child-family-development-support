@@ -8,6 +8,7 @@ import { SCHEDULE_CONFIG } from '@/lib/constants';
 
 type TimeSlot = {
   datetime: string;
+  available: boolean;
 };
 
 type FormData = {
@@ -145,7 +146,12 @@ export function AppointmentForm() {
     return acc;
   }, {});
 
-  const availableDates = new Set(Object.keys(slotsByDate));
+  // Only dates with at least one open slot are selectable; fully-booked days are blocked
+  const availableDates = new Set(
+    Object.entries(slotsByDate)
+      .filter(([, daySlots]) => daySlots.some((s) => s.available))
+      .map(([key]) => key),
+  );
 
   const today = toDateKey(new Date());
 
@@ -201,8 +207,10 @@ export function AppointmentForm() {
         const isSlotError = body.errors.some((err) => err.field === 'datetime');
         if (isSlotError) {
           setSlotUnavailable(true);
-          // Remove the taken slot from local list so UI reflects reality
-          setSlots((prev) => prev.filter((s) => s.datetime !== selectedDatetime));
+          // Mark the taken slot as unavailable so it shows as booked in the UI
+          setSlots((prev) =>
+            prev.map((s) => (s.datetime === selectedDatetime ? { ...s, available: false } : s)),
+          );
           setSelectedDatetime(null);
         } else {
           setHasError(true);
@@ -251,7 +259,9 @@ export function AppointmentForm() {
     );
   }
 
-  if (slotsError || slots.length === 0) {
+  const hasAnyAvailableSlot = slots.some((s) => s.available);
+
+  if (slotsError || !hasAnyAvailableSlot) {
     return (
       <p className="text-warm-600 py-6">{t('noSlotsAvailable')}</p>
     );
@@ -373,6 +383,19 @@ export function AppointmentForm() {
             <div className="flex flex-wrap gap-2">
               {timeSlotsForDate.map((slot) => {
                 const isSelected = selectedDatetime === slot.datetime;
+                if (!slot.available) {
+                  return (
+                    <div
+                      key={slot.datetime}
+                      className="flex flex-col items-center rounded-lg border border-border bg-warm-50 px-4 py-2 text-sm cursor-not-allowed"
+                      aria-label={formatTimeRange(slot.datetime, locale)}
+                    >
+                      <span className="font-medium text-warm-300 line-through">
+                        {formatTimeRange(slot.datetime, locale)}
+                      </span>
+                    </div>
+                  );
+                }
                 return (
                   <button
                     key={slot.datetime}

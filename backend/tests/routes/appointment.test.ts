@@ -74,17 +74,34 @@ describe('GET /appointments/availability', () => {
     const res = await request(app).get('/appointments/availability');
     const now = new Date();
 
-    for (const slot of res.body.slots as Array<{ datetime: string }>) {
+    for (const slot of res.body.slots as Array<{ datetime: string; available: boolean }>) {
       expect(new Date(slot.datetime) > now).toBe(true);
+    }
+  });
+
+  it('getAvailability_ShouldReturnSlotsWithAvailableField_WhenCalendarIsNotConfigured', async () => {
+    const res = await request(app).get('/appointments/availability');
+
+    for (const slot of res.body.slots as Array<{ datetime: string; available: boolean }>) {
+      expect(typeof slot.available).toBe('boolean');
+    }
+  });
+
+  it('getAvailability_ShouldMarkAllSlotsAsAvailable_WhenCalendarIsNotConfigured', async () => {
+    const res = await request(app).get('/appointments/availability');
+
+    for (const slot of res.body.slots as Array<{ datetime: string; available: boolean }>) {
+      expect(slot.available).toBe(true);
     }
   });
 
   it('getAvailability_ShouldReturnSlotsWithinBookingWindow_WhenCalendarIsNotConfigured', async () => {
     const res = await request(app).get('/appointments/availability');
     // Use end-of-day two months from now: slots on the last eligible day are still valid
+    // Mirror the backend's boundary exactly: local setMonth + UTC end-of-day
     const twoMonthsFromNow = new Date();
     twoMonthsFromNow.setMonth(twoMonthsFromNow.getMonth() + 2);
-    twoMonthsFromNow.setHours(23, 59, 59, 999);
+    twoMonthsFromNow.setUTCHours(23, 59, 59, 999);
 
     for (const slot of res.body.slots as Array<{ datetime: string }>) {
       expect(new Date(slot.datetime) <= twoMonthsFromNow).toBe(true);
