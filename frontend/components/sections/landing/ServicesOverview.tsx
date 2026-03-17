@@ -57,7 +57,7 @@ export function ServicesOverview({ locale }: ServicesOverviewProps) {
           const iconColor = iconColorClasses[index % iconColorClasses.length];
 
           return (
-            <Card key={service.id} hover className="flex flex-col">
+            <Card key={service.id} hover className="relative flex flex-col">
               {/* Icon */}
               <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl ${iconColor}`}>
                 <Icon className="h-6 w-6" aria-hidden="true" />
@@ -88,7 +88,7 @@ export function ServicesOverview({ locale }: ServicesOverviewProps) {
 
               <Link
                 href={`/${locale}/services/${serviceSlugMap[service.id]}`}
-                className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-primary-hover"
+                className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-primary-hover after:absolute after:inset-0 after:rounded-2xl"
               >
                 {t('services.learnMore')}
                 <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
