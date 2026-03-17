@@ -42,21 +42,27 @@ function toDateKey(date: Date): string {
   }).format(date);
 }
 
+const TIME_FORMAT_OPTIONS: Intl.DateTimeFormatOptions = {
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false,
+  timeZone: SCHEDULE_CONFIG.BUSINESS_TIMEZONE,
+};
+
 /**
- * Formats a slot time in the business timezone so the displayed time always matches
- * the Amsterdam local time that was booked — independent of the visitor's browser timezone.
+ * Formats a slot as a time range, e.g. "09:00 - 10:00", in the business timezone.
+ * The end time is derived by adding SLOT_DURATION_MINUTES to the start time.
  */
-function formatTime(isoString: string, locale: string): string {
-  return new Date(isoString).toLocaleTimeString(locale, {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-    timeZone: SCHEDULE_CONFIG.BUSINESS_TIMEZONE,
-  });
+function formatTimeRange(isoString: string, locale: string): string {
+  const start = new Date(isoString);
+  const end = new Date(start.getTime() + SCHEDULE_CONFIG.SLOT_DURATION_MINUTES * 60 * 1000);
+  const fmt = (d: Date) => d.toLocaleTimeString(locale, TIME_FORMAT_OPTIONS);
+  return `${fmt(start)} - ${fmt(end)}`;
 }
 
 /**
- * Formats a slot date in the business timezone for the same reason as formatTime.
+ * Formats a slot date in the business timezone so the displayed date always matches
+ * the Amsterdam calendar day — independent of the visitor's browser timezone.
  */
 function formatDate(isoString: string, locale: string): string {
   return new Date(isoString).toLocaleDateString(locale, {
@@ -228,7 +234,7 @@ export function AppointmentForm() {
         </h3>
         <p className="text-warm-600">{t('successMessage')}</p>
         <p className="mt-2 rounded-lg bg-white px-6 py-3 text-sm font-medium text-warm-800 shadow-sm">
-          {formatDate(selectedDatetime, locale)} — {formatTime(selectedDatetime, locale)}
+          {formatDate(selectedDatetime, locale)} — {formatTimeRange(selectedDatetime, locale)}
         </p>
       </div>
     );
@@ -380,7 +386,7 @@ export function AppointmentForm() {
                         : 'border-border bg-white text-warm-700 hover:border-primary hover:text-primary',
                     ].join(' ')}
                   >
-                    {formatTime(slot.datetime, locale)}
+                    {formatTimeRange(slot.datetime, locale)}
                   </button>
                 );
               })}
@@ -405,7 +411,7 @@ export function AppointmentForm() {
           <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-sage-50 px-4 py-2 text-sm text-warm-700">
             <Clock className="h-4 w-4 text-primary" />
             <span>
-              {formatDate(selectedDatetime, locale)} — {formatTime(selectedDatetime, locale)}
+              {formatDate(selectedDatetime, locale)} — {formatTimeRange(selectedDatetime, locale)}
             </span>
             <button
               type="button"
