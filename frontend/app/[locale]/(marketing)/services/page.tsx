@@ -134,15 +134,16 @@ function ServicesList({ locale }: { locale: string }) {
                 )}
               </div>
 
-              <h2 className="mb-2 font-sans text-lg font-semibold text-foreground">
+              <h3 className="mb-2 font-sans text-lg font-semibold text-foreground">
                 {t(service.titleKey as Parameters<typeof t>[0])}
-              </h2>
+              </h3>
               <p className="flex-1 text-sm leading-relaxed text-warm-600">
                 {t(service.descriptionKey as Parameters<typeof t>[0])}
               </p>
 
               <Link
                 href={`/${locale}/services/${serviceSlugMap[service.id]}`}
+                aria-label={`${tPage('exploreService')} — ${t(service.titleKey as Parameters<typeof t>[0])}`}
                 className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-primary-hover after:absolute after:inset-0 after:rounded-2xl after:content-['']"
               >
                 {tPage('exploreService')}
