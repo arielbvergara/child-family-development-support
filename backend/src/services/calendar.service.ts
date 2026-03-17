@@ -229,11 +229,9 @@ export function createCalendarService(
       for (const slot of daySlots) {
         // Exclude past slots
         if (slot <= now) continue;
-        // Exclude slots that conflict with existing events
+        // Mark slots that conflict with existing events as unavailable instead of excluding them
         const hasConflict = existingEvents.some((event) => slotOverlapsEvent(slot, event));
-        if (!hasConflict) {
-          slots.push({ datetime: slot.toISOString() });
-        }
+        slots.push({ datetime: slot.toISOString(), available: !hasConflict });
       }
 
       cursor.setDate(cursor.getDate() + 1);
@@ -318,7 +316,7 @@ export function generateAllWorkingSlots(from: Date, to: Date): TimeSlot[] {
     const daySlots = generateSlotsForDate(cursor);
     for (const slot of daySlots) {
       if (slot > now) {
-        slots.push({ datetime: slot.toISOString() });
+        slots.push({ datetime: slot.toISOString(), available: true });
       }
     }
     cursor.setDate(cursor.getDate() + 1);

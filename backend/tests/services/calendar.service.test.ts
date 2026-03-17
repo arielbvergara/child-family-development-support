@@ -91,7 +91,7 @@ describe('createCalendarService', () => {
       expect(slots.length).toBe(8);
     });
 
-    it('getAvailableSlots_ShouldExcludeSlots_WhenEventConflictsExist', async () => {
+    it('getAvailableSlots_ShouldMarkSlotAsUnavailable_WhenEventConflictsExist', async () => {
       const monday = nextMonday(0);
       monday.setHours(0, 0, 0, 0);
       const to = endOfDay(monday);
@@ -108,11 +108,16 @@ describe('createCalendarService', () => {
       const service = createCalendarService('sa@test.iam.gserviceaccount.com', 'key', 'primary');
       const slots = await service.getAvailableSlots(monday, to);
 
-      expect(slots.length).toBe(7); // 8 total − 1 blocked
-      expect(slots.some((s) => new Date(s.datetime).getHours() === 9)).toBe(false);
+      // All 8 slots are returned; the conflicting 09:00 slot is marked unavailable
+      expect(slots.length).toBe(8);
+      const nineAmSlot = slots.find((s) => new Date(s.datetime).getUTCHours() === eventStart.getUTCHours());
+      expect(nineAmSlot).toBeDefined();
+      expect(nineAmSlot!.available).toBe(false);
+      // All other slots are available
+      expect(slots.filter((s) => !s.available).length).toBe(1);
     });
 
-    it('getAvailableSlots_ShouldExcludeSlots_WhenEventPartiallyOverlaps', async () => {
+    it('getAvailableSlots_ShouldMarkOverlappingSlots_WhenEventPartiallyOverlaps', async () => {
       const monday = nextMonday(0);
       monday.setHours(0, 0, 0, 0);
       const to = endOfDay(monday);
@@ -130,8 +135,10 @@ describe('createCalendarService', () => {
       const service = createCalendarService('sa@test.iam.gserviceaccount.com', 'key', 'primary');
       const slots = await service.getAvailableSlots(monday, to);
 
-      // 09:00 and 10:00 are blocked; 8 - 2 = 6 remain
-      expect(slots.length).toBe(6);
+      // All 8 slots are returned; the 09:00 and 10:00 slots are marked unavailable
+      expect(slots.length).toBe(8);
+      expect(slots.filter((s) => !s.available).length).toBe(2);
+      expect(slots.filter((s) => s.available).length).toBe(6);
     });
 
     it('getAvailableSlots_ShouldReturnNoSlots_WhenDayIsSunday', async () => {

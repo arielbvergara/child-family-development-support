@@ -74,8 +74,24 @@ describe('GET /appointments/availability', () => {
     const res = await request(app).get('/appointments/availability');
     const now = new Date();
 
-    for (const slot of res.body.slots as Array<{ datetime: string }>) {
+    for (const slot of res.body.slots as Array<{ datetime: string; available: boolean }>) {
       expect(new Date(slot.datetime) > now).toBe(true);
+    }
+  });
+
+  it('getAvailability_ShouldReturnSlotsWithAvailableField_WhenCalendarIsNotConfigured', async () => {
+    const res = await request(app).get('/appointments/availability');
+
+    for (const slot of res.body.slots as Array<{ datetime: string; available: boolean }>) {
+      expect(typeof slot.available).toBe('boolean');
+    }
+  });
+
+  it('getAvailability_ShouldMarkAllSlotsAsAvailable_WhenCalendarIsNotConfigured', async () => {
+    const res = await request(app).get('/appointments/availability');
+
+    for (const slot of res.body.slots as Array<{ datetime: string; available: boolean }>) {
+      expect(slot.available).toBe(true);
     }
   });
 

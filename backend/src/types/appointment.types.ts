@@ -18,6 +18,7 @@ export type ValidatedAppointmentPayload = {
 
 export type TimeSlot = {
   datetime: string; // ISO 8601
+  available: boolean;
 };
 
 export type AvailabilityResponse = {
