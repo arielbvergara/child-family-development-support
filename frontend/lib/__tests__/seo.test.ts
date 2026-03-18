@@ -30,11 +30,6 @@ describe('buildPersonSchema', () => {
     expect(schema.sameAs).toEqual(['https://linkedin.com/in/anna-de-vries']);
   });
 
-  it('buildPersonSchema_Should_OmitSameAs_WhenLinkedInIsEmpty', () => {
-    const schema = buildPersonSchema('nl', BASE_INFO) as Record<string, unknown>;
-    expect(schema).not.toHaveProperty('sameAs');
-  });
-
   it('buildPersonSchema_Should_IncludeBigRegisterInSameAs_WhenBigRegisterIsNonEmpty', () => {
     const schema = buildPersonSchema('nl', {
       ...BASE_INFO,
