@@ -4,6 +4,12 @@ import { Footer } from '@/components/layout/Footer';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { CONTACT_INFO, SITE_CONFIG } from '@/lib/constants';
 
+const LOCALE_TO_BCP47: Record<string, string> = {
+  nl: 'nl-NL',
+  en: 'en-GB',
+  de: 'de-DE',
+};
+
 const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
@@ -12,7 +18,9 @@ const websiteSchema = {
   name: SITE_CONFIG.name,
   description:
     'Professionele pedagogische begeleiding voor kinderen en gezinnen.',
-  inLanguage: ['nl', 'en', 'de'],
+  inLanguage: (SITE_CONFIG.locales ?? []).map(
+    (locale) => LOCALE_TO_BCP47[locale] ?? locale,
+  ),
 };
 
 const personStubSchema = {
