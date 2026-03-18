@@ -9,6 +9,7 @@ import { JsonLd } from '@/components/seo/JsonLd';
 import { buildBreadcrumbSchema } from '@/lib/seo';
 import { createMetadata } from '@/lib/metadata';
 import { SERVICE_PAGES, SITE_CONFIG } from '@/lib/constants';
+import { getLocalizedPath } from '@/lib/pathnames';
 import type { Locale, ServicePageConfig } from '@/lib/types';
 
 interface PageProps {
@@ -178,7 +179,7 @@ function ServiceCta({ serviceId, locale }: ServiceCtaProps) {
         </h2>
         <p className="mt-3 text-warm-600">{t('cta.text')}</p>
         <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-          <Button href={`/${locale}/make-an-appointment`} variant="primary" size="lg">
+          <Button href={`/${locale}${getLocalizedPath('/make-an-appointment', locale)}`} variant="primary" size="lg">
             {t('cta.button')}
           </Button>
           <Button href={`/${locale}/contact`} variant="secondary" size="lg">

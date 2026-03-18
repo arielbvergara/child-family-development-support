@@ -8,6 +8,7 @@ import { Menu, Globe, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { MobileMenu } from './MobileMenu';
 import { NAV_LINKS, SERVICE_PAGES, SITE_CONFIG } from '@/lib/constants';
+import { getLocalizedPath } from '@/lib/pathnames';
 import { clsx } from 'clsx';
 
 interface HeaderProps {
@@ -148,10 +149,11 @@ export function Header({ locale }: HeaderProps) {
               }
 
               const [linkBasePath, linkHash] = link.href.split('#');
+              const resolvedPath = getLocalizedPath(linkBasePath, locale);
               const href = linkHash
-                ? `/${locale}${linkBasePath === '/' ? '' : linkBasePath}#${linkHash}`
-                : `/${locale}${linkBasePath === '/' ? '' : linkBasePath}`;
-              const localizedBase = `/${locale}${linkBasePath === '/' ? '' : linkBasePath}`;
+                ? `/${locale}${resolvedPath === '/' ? '' : resolvedPath}#${linkHash}`
+                : `/${locale}${resolvedPath === '/' ? '' : resolvedPath}`;
+              const localizedBase = `/${locale}${resolvedPath === '/' ? '' : resolvedPath}`;
               const isAnchorLink = Boolean(linkHash);
               const anchorNavActive = NAV_LINKS.some((l) => {
                 const [lBase, lHash] = l.href.split('#');
@@ -162,8 +164,8 @@ export function Header({ locale }: HeaderProps) {
               const isActive = isAnchorLink
                 ? pathname === localizedBase && currentHash === `#${linkHash}`
                 : link.href === '/'
-                  ? pathname === `/${locale}` && !anchorNavActive
-                  : pathname === `/${locale}${link.href}`;
+                  ? pathname === localizedBase && !anchorNavActive
+                  : pathname === localizedBase;
               return (
                 <Link
                   key={link.href}
