@@ -27,7 +27,10 @@ export function BiographySection() {
 
         {/* Bio content */}
         <div className="md:col-span-3">
-          <Heading level={2} className="mb-2">
+          <Heading
+            level={2}
+            className={PROFESSIONAL_INFO.name ? 'mb-2' : 'mb-6'}
+          >
             {t('title')}
           </Heading>
           {PROFESSIONAL_INFO.name && (
