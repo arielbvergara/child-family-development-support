@@ -23,15 +23,15 @@ const professionalServiceSchema = {
   description:
     'Professionele pedagogische begeleiding voor kinderen en gezinnen.',
   url: SITE_CONFIG.siteUrl,
-  telephone: CONTACT_INFO.phone,
-  email: CONTACT_INFO.email,
+  ...(CONTACT_INFO.phone ? { telephone: CONTACT_INFO.phone } : {}),
+  ...(CONTACT_INFO.email ? { email: CONTACT_INFO.email } : {}),
   image: `${SITE_CONFIG.siteUrl}/images/og-image.jpg`,
   priceRange: '$$',
   address: {
     '@type': 'PostalAddress',
-    streetAddress: CONTACT_INFO.addressLine1,
-    addressLocality: CONTACT_INFO.city,
-    postalCode: CONTACT_INFO.postalCode,
+    ...(CONTACT_INFO.addressLine1 ? { streetAddress: CONTACT_INFO.addressLine1 } : {}),
+    ...(CONTACT_INFO.city ? { addressLocality: CONTACT_INFO.city } : {}),
+    ...(CONTACT_INFO.postalCode ? { postalCode: CONTACT_INFO.postalCode } : {}),
     addressCountry: 'NL',
   },
   geo: {

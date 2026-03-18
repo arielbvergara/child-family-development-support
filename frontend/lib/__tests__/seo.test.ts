@@ -4,7 +4,7 @@ import { buildPersonSchema } from '@/lib/seo';
 const BASE_INFO = { name: 'Dr. Anna de Vries', photoUrl: '', linkedIn: '' };
 
 describe('buildPersonSchema', () => {
-  it('buildPersonSchema_Should_UseProfessionalName_WhenEnvVarIsSet', () => {
+  it('buildPersonSchema_Should_UseProvidedName_WhenInfoArgumentIsPassed', () => {
     const schema = buildPersonSchema('nl', { ...BASE_INFO, name: 'Dr. Anna de Vries' });
     expect(schema.name).toBe('Dr. Anna de Vries');
   });

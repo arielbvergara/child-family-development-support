@@ -6,6 +6,7 @@ import { PhilosophySection } from '@/components/sections/about/PhilosophySection
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createMetadata } from '@/lib/metadata';
 import { buildPersonSchema, buildBreadcrumbSchema } from '@/lib/seo';
+import { PROFESSIONAL_INFO } from '@/lib/constants';
 import type { Locale } from '@/lib/types';
 
 interface PageProps {
@@ -67,7 +68,7 @@ export default async function AboutPage({ params }: PageProps) {
 
   return (
     <>
-      <JsonLd schema={buildPersonSchema(locale)} />
+      {PROFESSIONAL_INFO.name && <JsonLd schema={buildPersonSchema(locale)} />}
       <JsonLd
         schema={buildBreadcrumbSchema(locale, [
           { name: names.home, path: '' },

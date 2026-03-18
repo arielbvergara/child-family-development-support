@@ -30,6 +30,12 @@ export interface Testimonial {
   roleKey: string;
 }
 
+export interface ProfessionalInfo {
+  readonly name: string;
+  readonly photoUrl: string;
+  readonly linkedIn: string;
+}
+
 export interface ContactInfo {
   addressLine1: string;
   postalCode: string;

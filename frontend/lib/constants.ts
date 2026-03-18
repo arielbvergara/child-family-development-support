@@ -1,4 +1,4 @@
-import type { Service, NavLink, Testimonial, ContactInfo, Credential, ServicePageConfig } from './types';
+import type { Service, NavLink, Testimonial, ContactInfo, ProfessionalInfo, Credential, ServicePageConfig } from './types';
 
 export const SITE_CONFIG = {
   name: 'Pedagogisch Advies',
@@ -130,11 +130,11 @@ export const CONTACT_INFO: ContactInfo = {
   ],
 };
 
-export const PROFESSIONAL_INFO = {
+export const PROFESSIONAL_INFO: ProfessionalInfo = {
   name: process.env.NEXT_PUBLIC_PROFESSIONAL_NAME ?? '',
   photoUrl: '', // populate when available
   linkedIn: '', // populate when available
-} as const;
+};
 
 export const CREDENTIALS: Credential[] = [
   { titleKey: 'about.credentials.1', year: '2012', institution: 'Universiteit van Amsterdam' },

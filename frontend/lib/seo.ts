@@ -1,11 +1,11 @@
 import { SITE_CONFIG, PROFESSIONAL_INFO } from './constants';
+import type { ProfessionalInfo } from './types';
 
 interface BreadcrumbItem {
   name: string;
   path: string;
 }
 
-type ProfessionalInfo = { name: string; photoUrl: string; linkedIn: string };
 
 export function buildPersonSchema(
   locale: string,
