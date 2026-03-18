@@ -1,52 +1,13 @@
-import { createPrivateKey, createSign } from 'node:crypto';
 import type { ValidatedAppointmentPayload, TimeSlot, CalendarEvent } from '../types/appointment.types';
 import {
   CALENDAR_SCOPES,
   CALENDAR_API_BASE,
-  GOOGLE_TOKEN_URL,
   SLOT_DURATION_MINUTES,
   WORKING_SCHEDULE,
   AVAILABILITY_CACHE_TTL_MS,
   BUSINESS_TIMEZONE,
 } from '../constants/appointment.constants';
-
-async function getAccessToken(serviceAccountEmail: string, privateKeyPem: string): Promise<string> {
-  const now = Math.floor(Date.now() / 1000);
-
-  const header = Buffer.from(JSON.stringify({ alg: 'RS256', typ: 'JWT' })).toString('base64url');
-  const claimSet = Buffer.from(
-    JSON.stringify({
-      iss: serviceAccountEmail,
-      scope: CALENDAR_SCOPES.join(' '),
-      aud: GOOGLE_TOKEN_URL,
-      iat: now,
-      exp: now + 3600,
-    }),
-  ).toString('base64url');
-
-  const signingInput = `${header}.${claimSet}`;
-  const keyObject = createPrivateKey({ key: privateKeyPem, format: 'pem' });
-  const signature = createSign('RSA-SHA256').update(signingInput).sign(keyObject).toString('base64url');
-  const assertion = `${signingInput}.${signature}`;
-
-  const response = await fetch(GOOGLE_TOKEN_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({
-      grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-      assertion,
-    }),
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error('Google OAuth token exchange failed:', errorText);
-    throw new Error('Authentication service unavailable');
-  }
-
-  const json = (await response.json()) as { access_token: string };
-  return json.access_token;
-}
+import { getGoogleAccessToken } from '../utils/google-auth';
 
 /**
  * Returns the day of week (0 = Sunday … 6 = Saturday) for a given Date as it
@@ -184,7 +145,7 @@ export function createCalendarService(
   }
 
   async function getExistingEvents(from: Date, to: Date): Promise<CalendarEvent[]> {
-    const accessToken = await getAccessToken(serviceAccountEmail, normalizedKey);
+    const accessToken = await getGoogleAccessToken(serviceAccountEmail, normalizedKey, [...CALENDAR_SCOPES]);
     const encodedCalendarId = encodeURIComponent(calendarId);
     const params = new URLSearchParams({
       timeMin: from.toISOString(),
@@ -243,7 +204,7 @@ export function createCalendarService(
   }
 
   async function createCalendarEvent(payload: ValidatedAppointmentPayload): Promise<void> {
-    const accessToken = await getAccessToken(serviceAccountEmail, normalizedKey);
+    const accessToken = await getGoogleAccessToken(serviceAccountEmail, normalizedKey, [...CALENDAR_SCOPES]);
     const encodedCalendarId = encodeURIComponent(calendarId);
 
     const start = new Date(payload.datetime);

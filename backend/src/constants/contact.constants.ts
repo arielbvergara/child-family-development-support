@@ -25,5 +25,4 @@ export const CONTACT_RATE_LIMIT_MAX = 5; // max 5 submissions per window per IP
 
 export const SHEETS_RANGE = 'A:F';
 export const SHEETS_SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
-export const SHEETS_COLUMNS = ['Timestamp', 'Name', 'Email', 'Phone', 'Service', 'Message'] as const;
 export const GOOGLE_SHEETS_BASE_URL = 'https://docs.google.com/spreadsheets/d';

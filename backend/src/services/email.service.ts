@@ -13,6 +13,13 @@ function escapeHtml(str: string): string {
 }
 
 /**
+ * Generates a conditional HTML table row. Returns an empty string when value is falsy.
+ */
+function htmlTableRow(label: string, value: string): string {
+  return value ? `<tr><td><strong>${label}:</strong></td><td>${value}</td></tr>` : '';
+}
+
+/**
  * Strips CR, LF, and other ASCII control characters from a string to prevent
  * email header injection when the value is used in a header field (e.g. subject).
  */
@@ -37,12 +44,8 @@ export function createEmailService(
     const safeService = payload.service ? escapeHtml(payload.service) : '';
     const safeMessage = escapeHtml(payload.message);
 
-    const phoneLine = safePhone
-      ? `<tr><td><strong>Phone:</strong></td><td>${safePhone}</td></tr>`
-      : '';
-    const serviceLine = safeService
-      ? `<tr><td><strong>Service:</strong></td><td>${safeService}</td></tr>`
-      : '';
+    const phoneLine = htmlTableRow('Phone', safePhone);
+    const serviceLine = htmlTableRow('Service', safeService);
     const sheetsLinkSection = sheetsUrl
       ? `
         <p style="margin-top:24px;">
@@ -91,15 +94,9 @@ export function createEmailService(
       timeZone: BUSINESS_TIMEZONE,
     }));
 
-    const phoneLine = safePhone
-      ? `<tr><td><strong>Phone:</strong></td><td>${safePhone}</td></tr>`
-      : '';
-    const serviceLine = safeService
-      ? `<tr><td><strong>Service:</strong></td><td>${safeService}</td></tr>`
-      : '';
-    const notesLine = safeNotes
-      ? `<tr><td><strong>Notes:</strong></td><td>${safeNotes}</td></tr>`
-      : '';
+    const phoneLine = htmlTableRow('Phone', safePhone);
+    const serviceLine = htmlTableRow('Service', safeService);
+    const notesLine = htmlTableRow('Notes', safeNotes);
 
     await resend.emails.send({
       from: fromEmail,
