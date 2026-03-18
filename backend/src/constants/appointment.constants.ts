@@ -33,8 +33,6 @@ export const BUSINESS_TIMEZONE = 'Europe/Amsterdam';
 export const CALENDAR_SCOPES = ['https://www.googleapis.com/auth/calendar'] as const;
 export const CALENDAR_API_BASE = 'https://www.googleapis.com/calendar/v3';
 
-export const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token';
-
 /**
  * How long the availability slot list is cached server-side before the next
  * Google Calendar API call is made. Keeps us well within API rate limits while
