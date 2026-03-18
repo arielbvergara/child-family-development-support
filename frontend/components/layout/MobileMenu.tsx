@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/Button';
 import { NAV_LINKS, SERVICE_PAGES } from '@/lib/constants';
+import { getLocalizedPath } from '@/lib/pathnames';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -131,7 +132,8 @@ export function MobileMenu({ isOpen, onClose, locale }: MobileMenuProps) {
                     );
                   }
 
-                  const href = `/${locale}${link.href === '/' ? '' : link.href}`;
+                  const resolvedPath = getLocalizedPath(link.href, locale);
+                  const href = `/${locale}${resolvedPath === '/' ? '' : resolvedPath}`;
                   const isActive = pathname === href || (link.href === '/' && pathname === `/${locale}`);
                   return (
                     <li key={link.href}>
@@ -155,7 +157,7 @@ export function MobileMenu({ isOpen, onClose, locale }: MobileMenuProps) {
             {/* CTA */}
             <div className="border-t border-border p-6">
               <Button
-                href={`/${locale}/make-an-appointment`}
+                href={`/${locale}${getLocalizedPath('/make-an-appointment', locale)}`}
                 variant="primary"
                 size="md"
                 className="w-full"

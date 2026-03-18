@@ -5,21 +5,24 @@ import { AppointmentFormSection } from '@/components/sections/appointment/Appoin
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createMetadata } from '@/lib/metadata';
 import { buildBreadcrumbSchema } from '@/lib/seo';
+import { LOCALIZED_PATHNAMES, getLocalizedPath } from '@/lib/pathnames';
 import type { Locale } from '@/lib/types';
 
 interface PageProps {
   params: Promise<{ locale: string }>;
 }
 
+const appointmentPaths = LOCALIZED_PATHNAMES['/make-an-appointment'];
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
   return createMetadata('appointment', locale as Locale, {
     alternates: {
-      canonical: `/${locale}/make-an-appointment`,
+      canonical: `/${locale}${appointmentPaths[locale as Locale]}`,
       languages: {
-        nl: '/nl/make-an-appointment',
-        en: '/en/make-an-appointment',
-        de: '/de/make-an-appointment',
+        nl: `/nl${appointmentPaths.nl}`,
+        en: `/en${appointmentPaths.en}`,
+        de: `/de${appointmentPaths.de}`,
       },
     },
   });
@@ -54,7 +57,7 @@ export default async function MakeAnAppointmentPage({ params }: PageProps) {
       <JsonLd
         schema={buildBreadcrumbSchema(locale, [
           { name: names.home, path: '' },
-          { name: names.appointment, path: '/make-an-appointment' },
+          { name: names.appointment, path: getLocalizedPath('/make-an-appointment', locale) },
         ])}
       />
       <PageHero />

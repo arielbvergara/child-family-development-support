@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { SERVICE_PAGES, SITE_CONFIG } from '@/lib/constants';
+import { getLocalizedPath } from '@/lib/pathnames';
 
 const serviceEntries = SERVICE_PAGES.map((service) => ({
   path: `/services/${service.slug}`,
@@ -19,15 +20,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const { locales, siteUrl } = SITE_CONFIG;
 
   return INDEXABLE_PAGES.flatMap(({ path, priority, changeFrequency }) =>
-    locales.map((locale) => ({
-      url: `${siteUrl}/${locale}${path}`,
-      changeFrequency,
-      priority,
-      alternates: {
-        languages: Object.fromEntries(
-          locales.map((l) => [l, `${siteUrl}/${l}${path}`])
-        ),
-      },
-    }))
+    locales.map((locale) => {
+      const localizedPath = getLocalizedPath(path, locale);
+      return {
+        url: `${siteUrl}/${locale}${localizedPath}`,
+        changeFrequency,
+        priority,
+        alternates: {
+          languages: Object.fromEntries(
+            locales.map((l) => [l, `${siteUrl}/${l}${getLocalizedPath(path, l)}`])
+          ),
+        },
+      };
+    })
   );
 }
