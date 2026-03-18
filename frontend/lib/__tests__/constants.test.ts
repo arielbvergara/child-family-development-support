@@ -1,4 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
+import type { Service } from '../types';
 
 describe('CONTACT_INFO', () => {
   beforeEach(() => {
@@ -92,5 +93,50 @@ describe('PROFESSIONAL_INFO', () => {
   it('PROFESSIONAL_INFO_Should_HaveEmptyBigRegister_WhenEnvVarIsAbsent', async () => {
     const { PROFESSIONAL_INFO } = await import('../constants');
     expect(PROFESSIONAL_INFO.bigRegister).toBe('');
+  });
+});
+
+describe('SERVICE_CATALOG', () => {
+  let catalog: Service[];
+
+  beforeAll(async () => {
+    vi.resetModules();
+    const constants = await import('../constants');
+    catalog = constants.SERVICE_CATALOG;
+  });
+
+  it('SERVICE_CATALOG_ShouldContainFourServices_WhenImported', () => {
+    expect(catalog).toHaveLength(4);
+  });
+
+  it('SERVICE_CATALOG_ShouldHaveUniqueIds_WhenImported', () => {
+    const ids = catalog.map((s) => s.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it('SERVICE_CATALOG_ShouldHaveSlugForEachService_WhenImported', () => {
+    catalog.forEach((s) => {
+      expect(s.slug).toBeTruthy();
+    });
+  });
+
+  it('SERVICE_CATALOG_ShouldHaveTranslationKeysForEachService_WhenImported', () => {
+    catalog.forEach((s) => {
+      expect(s.titleKey).toMatch(/^services\.\w+\.title$/);
+      expect(s.descriptionKey).toMatch(/^services\.\w+\.description$/);
+    });
+  });
+
+  it('SERVICE_CATALOG_ShouldHaveOnlineOrInPersonFlagSet_WhenImported', () => {
+    catalog.forEach((s) => {
+      expect(s.online || s.inPerson).toBe(true);
+    });
+  });
+
+  it('SERVICE_CATALOG_ShouldContainExpectedServiceIds_WhenImported', () => {
+    const ids = catalog.map((s) => s.id);
+    expect(ids).toEqual(
+      expect.arrayContaining(['individual', 'workshops', 'assessment', 'school']),
+    );
   });
 });
