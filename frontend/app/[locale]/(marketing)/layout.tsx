@@ -12,7 +12,7 @@ const websiteSchema = {
   name: SITE_CONFIG.name,
   description:
     'Professionele pedagogische begeleiding voor kinderen en gezinnen.',
-  inLanguage: ['nl', 'en', 'de'],
+  inLanguage: ['nl-NL', 'en-GB', 'de-DE'],
 };
 
 const personStubSchema = {
