@@ -31,7 +31,9 @@ export function Header({ locale }: HeaderProps) {
   const [isServicesOpen, setIsServicesOpen] = useState(false);
   const [isLocaleOpen, setIsLocaleOpen] = useState(false);
   const servicesDropdownRef = useRef<HTMLDivElement>(null);
+  const servicesButtonRef = useRef<HTMLButtonElement>(null);
   const localeDropdownRef = useRef<HTMLDivElement>(null);
+  const localeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!isServicesOpen) return;
@@ -114,8 +116,15 @@ export function Header({ locale }: HeaderProps) {
                     onBlurCapture={(e) => {
                       if (!e.currentTarget.contains(e.relatedTarget as Node)) setIsServicesOpen(false);
                     }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Escape') {
+                        setIsServicesOpen(false);
+                        servicesButtonRef.current?.focus();
+                      }
+                    }}
                   >
                     <button
+                      ref={servicesButtonRef}
                       type="button"
                       aria-haspopup="menu"
                       aria-expanded={isServicesOpen}
@@ -205,10 +214,17 @@ export function Header({ locale }: HeaderProps) {
               onBlurCapture={(e) => {
                 if (!e.currentTarget.contains(e.relatedTarget as Node)) setIsLocaleOpen(false);
               }}
+              onKeyDown={(e) => {
+                if (e.key === 'Escape') {
+                  setIsLocaleOpen(false);
+                  localeButtonRef.current?.focus();
+                }
+              }}
             >
               <button
+                ref={localeButtonRef}
                 type="button"
-                aria-haspopup="listbox"
+                aria-haspopup="menu"
                 aria-expanded={isLocaleOpen}
                 aria-label="Select language"
                 onClick={() => setIsLocaleOpen((prev) => !prev)}
@@ -222,7 +238,7 @@ export function Header({ locale }: HeaderProps) {
                 />
               </button>
               <div
-                role="listbox"
+                role="menu"
                 aria-label="Language"
                 className={clsx(
                   'absolute right-0 top-full z-50 mt-1 w-44 rounded-xl border border-border bg-surface py-2 shadow-lg',
@@ -233,8 +249,7 @@ export function Header({ locale }: HeaderProps) {
                   <Link
                     key={loc}
                     href={`/${loc}${pathWithoutLocale === '/' ? '' : pathWithoutLocale}`}
-                    role="option"
-                    aria-selected={loc === locale}
+                    role="menuitem"
                     onClick={() => setIsLocaleOpen(false)}
                     className={clsx(
                       'flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors',
