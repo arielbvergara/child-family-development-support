@@ -107,6 +107,7 @@ export function MobileMenu({ isOpen, onClose, locale, triggerRef }: MobileMenuPr
                           onClick={() => setIsServicesExpanded((prev) => !prev)}
                           aria-expanded={isServicesExpanded}
                           aria-controls="services-mobile-menu"
+                          aria-current={isServicesActive ? 'page' : undefined}
                           className={`flex w-full cursor-pointer items-center justify-between rounded-lg px-4 py-3 text-base font-medium transition-colors ${
                             isServicesActive
                               ? 'bg-primary-light text-primary'
@@ -156,6 +157,7 @@ export function MobileMenu({ isOpen, onClose, locale, triggerRef }: MobileMenuPr
                       <Link
                         href={href}
                         onClick={onClose}
+                        aria-current={isActive ? 'page' : undefined}
                         className={`block rounded-lg px-4 py-3 text-base font-medium transition-colors ${
                           isActive
                             ? 'bg-primary-light text-primary'

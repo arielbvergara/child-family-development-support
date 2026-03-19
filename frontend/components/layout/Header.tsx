@@ -147,6 +147,7 @@ export function Header({ locale }: HeaderProps) {
                       aria-haspopup="menu"
                       aria-expanded={isServicesOpen}
                       aria-controls="services-desktop-menu"
+                      aria-current={isServicesActive ? 'page' : undefined}
                       onClick={() => setIsServicesOpen((prev) => !prev)}
                       className={clsx(
                         'flex cursor-pointer items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
@@ -210,6 +211,7 @@ export function Header({ locale }: HeaderProps) {
                   key={link.href}
                   href={href}
                   onClick={() => setCurrentHash(linkHash ? `#${linkHash}` : '')}
+                  aria-current={isActive ? 'page' : undefined}
                   className={clsx(
                     'rounded-md px-3 py-2 text-sm font-medium transition-colors',
                     isActive
