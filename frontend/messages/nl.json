@@ -53,7 +53,8 @@
       "label": "Geregistreerd"
     },
     "sectionTitle": "Vertrouwd door gezinnen",
-    "sectionSubtitle": "Wat ouders zeggen over de begeleiding"
+    "sectionSubtitle": "Wat ouders zeggen over de begeleiding",
+    "starsLabel": "5 sterren"
   },
   "testimonials": {
     "1": {
