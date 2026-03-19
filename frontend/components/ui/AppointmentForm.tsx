@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { ChevronLeft, ChevronRight, CheckCircle, Clock } from 'lucide-react';
 import { Button } from './Button';
@@ -130,6 +130,14 @@ export function AppointmentForm() {
   const [submitted, setSubmitted] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [slotUnavailable, setSlotUnavailable] = useState(false);
+  const successHeadingRef = useRef<HTMLHeadingElement>(null);
+
+  // Move focus to success heading when form submits successfully
+  useEffect(() => {
+    if (submitted) {
+      successHeadingRef.current?.focus();
+    }
+  }, [submitted]);
 
   useEffect(() => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -240,16 +248,26 @@ export function AppointmentForm() {
 
   if (submitted && selectedDatetime) {
     return (
-      <div className="flex flex-col items-center justify-center gap-4 rounded-xl bg-sage-50 p-10 text-center">
-        <CheckCircle className="h-12 w-12 text-primary" />
-        <h3 className="font-display text-xl font-bold text-foreground">
+      <>
+        {/* Inline live region — rendered alongside success content to announce it to screen readers */}
+        <div aria-live="polite" aria-atomic="true" className="sr-only">
           {t('successTitle')}
-        </h3>
-        <p className="text-warm-600">{t('successMessage')}</p>
-        <p className="mt-2 rounded-lg bg-white px-6 py-3 text-sm font-medium text-warm-800 shadow-sm">
-          {formatDate(selectedDatetime, locale)} — {formatTimeRange(selectedDatetime, locale)}
-        </p>
-      </div>
+        </div>
+        <div className="flex flex-col items-center justify-center gap-4 rounded-xl bg-sage-50 p-10 text-center">
+          <CheckCircle className="h-12 w-12 text-primary" aria-hidden="true" />
+          <h3
+            ref={successHeadingRef}
+            tabIndex={-1}
+            className="font-display text-xl font-bold text-foreground focus:outline-none"
+          >
+            {t('successTitle')}
+          </h3>
+          <p className="text-warm-600">{t('successMessage')}</p>
+          <p className="mt-2 rounded-lg bg-white px-6 py-3 text-sm font-medium text-warm-800 shadow-sm">
+            {formatDate(selectedDatetime, locale)} — {formatTimeRange(selectedDatetime, locale)}
+          </p>
+        </div>
+      </>
     );
   }
 
@@ -548,6 +566,7 @@ export function AppointmentForm() {
                 size="md"
                 className="w-full sm:w-auto"
                 disabled={isSubmitting}
+                aria-busy={isSubmitting}
               >
                 {isSubmitting ? t('submitting') : t('submit')}
               </Button>

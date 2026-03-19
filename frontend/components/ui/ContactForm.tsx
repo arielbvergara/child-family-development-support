@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from './Button';
 import { CheckCircle } from 'lucide-react';
@@ -33,6 +33,14 @@ export function ContactForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [formData, setFormData] = useState<FormData>(INITIAL_FORM_DATA);
+  const successHeadingRef = useRef<HTMLHeadingElement>(null);
+
+  // Move focus to success heading and announce via live region when submitted
+  useEffect(() => {
+    if (submitted) {
+      successHeadingRef.current?.focus();
+    }
+  }, [submitted]);
 
   function handleChange(
     e: React.ChangeEvent<
@@ -68,146 +76,156 @@ export function ContactForm() {
     }
   }
 
-  if (submitted) {
-    return (
-      <div className="flex flex-col items-center justify-center gap-4 rounded-xl bg-sage-50 p-10 text-center">
-        <CheckCircle className="h-12 w-12 text-primary" />
-        <h3 className="font-display text-xl font-bold text-foreground">
-          {t('successTitle')}
-        </h3>
-        <p className="text-warm-600">{t('successMessage')}</p>
-      </div>
-    );
-  }
-
   return (
-    <form onSubmit={handleSubmit} noValidate className="space-y-5">
-      <div className="grid gap-5 sm:grid-cols-2">
-        {/* Name */}
-        <div>
-          <label
-            htmlFor="name"
-            className="mb-1.5 block text-sm font-semibold text-warm-800"
+    <>
+      {/* Persistent live region — announces success to screen readers */}
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {submitted ? t('successTitle') : ''}
+      </div>
+
+      {submitted ? (
+        <div className="flex flex-col items-center justify-center gap-4 rounded-xl bg-sage-50 p-10 text-center">
+          <CheckCircle className="h-12 w-12 text-primary" aria-hidden="true" />
+          <h3
+            ref={successHeadingRef}
+            tabIndex={-1}
+            className="font-display text-xl font-bold text-foreground focus:outline-none"
           >
-            {t('name')} <span aria-hidden="true" className="text-primary">*</span>
-          </label>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            required
-            aria-required="true"
-            placeholder={t('namePlaceholder')}
-            value={formData.name}
-            onChange={handleChange}
-            className={INPUT_CLASS}
-          />
+            {t('successTitle')}
+          </h3>
+          <p className="text-warm-600">{t('successMessage')}</p>
         </div>
+      ) : (
+        <form onSubmit={handleSubmit} noValidate className="space-y-5">
+          <div className="grid gap-5 sm:grid-cols-2">
+            {/* Name */}
+            <div>
+              <label
+                htmlFor="name"
+                className="mb-1.5 block text-sm font-semibold text-warm-800"
+              >
+                {t('name')} <span aria-hidden="true" className="text-primary">*</span>
+              </label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                required
+                aria-required="true"
+                placeholder={t('namePlaceholder')}
+                value={formData.name}
+                onChange={handleChange}
+                className={INPUT_CLASS}
+              />
+            </div>
 
-        {/* Email */}
-        <div>
-          <label
-            htmlFor="email"
-            className="mb-1.5 block text-sm font-semibold text-warm-800"
-          >
-            {t('email')} <span aria-hidden="true" className="text-primary">*</span>
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            required
-            aria-required="true"
-            placeholder={t('emailPlaceholder')}
-            value={formData.email}
-            onChange={handleChange}
-            className={INPUT_CLASS}
-          />
-        </div>
-      </div>
+            {/* Email */}
+            <div>
+              <label
+                htmlFor="email"
+                className="mb-1.5 block text-sm font-semibold text-warm-800"
+              >
+                {t('email')} <span aria-hidden="true" className="text-primary">*</span>
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                aria-required="true"
+                placeholder={t('emailPlaceholder')}
+                value={formData.email}
+                onChange={handleChange}
+                className={INPUT_CLASS}
+              />
+            </div>
+          </div>
 
-      {/* Phone */}
-      <div>
-        <label
-          htmlFor="phone"
-          className="mb-1.5 block text-sm font-semibold text-warm-800"
-        >
-          {t('phone')}
-        </label>
-        <input
-          id="phone"
-          name="phone"
-          type="tel"
-          placeholder={t('phonePlaceholder')}
-          value={formData.phone}
-          onChange={handleChange}
-          className={INPUT_CLASS}
-        />
-      </div>
+          {/* Phone */}
+          <div>
+            <label
+              htmlFor="phone"
+              className="mb-1.5 block text-sm font-semibold text-warm-800"
+            >
+              {t('phone')}
+            </label>
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              placeholder={t('phonePlaceholder')}
+              value={formData.phone}
+              onChange={handleChange}
+              className={INPUT_CLASS}
+            />
+          </div>
 
-      {/* Service */}
-      <div>
-        <label
-          htmlFor="service"
-          className="mb-1.5 block text-sm font-semibold text-warm-800"
-        >
-          {t('service')}
-        </label>
-        <select
-          id="service"
-          name="service"
-          value={formData.service}
-          onChange={handleChange}
-          className={SELECT_CLASS}
-        >
-          <option value="">{t('serviceDefault')}</option>
-          {SERVICE_CATALOG.map((s) => (
-            <option key={s.id} value={s.id}>{t(`serviceOptions.${s.id}`)}</option>
-          ))}
-          <option value="other">{t('serviceOptions.other')}</option>
-        </select>
-      </div>
+          {/* Service */}
+          <div>
+            <label
+              htmlFor="service"
+              className="mb-1.5 block text-sm font-semibold text-warm-800"
+            >
+              {t('service')}
+            </label>
+            <select
+              id="service"
+              name="service"
+              value={formData.service}
+              onChange={handleChange}
+              className={SELECT_CLASS}
+            >
+              <option value="">{t('serviceDefault')}</option>
+              {SERVICE_CATALOG.map((s) => (
+                <option key={s.id} value={s.id}>{t(`serviceOptions.${s.id}`)}</option>
+              ))}
+              <option value="other">{t('serviceOptions.other')}</option>
+            </select>
+          </div>
 
-      {/* Message */}
-      <div>
-        <label
-          htmlFor="message"
-          className="mb-1.5 block text-sm font-semibold text-warm-800"
-        >
-          {t('message')} <span aria-hidden="true" className="text-primary">*</span>
-        </label>
-        <textarea
-          id="message"
-          name="message"
-          required
-          aria-required="true"
-          rows={5}
-          placeholder={t('messagePlaceholder')}
-          value={formData.message}
-          onChange={handleChange}
-          className={`resize-y ${INPUT_CLASS}`}
-        />
-      </div>
+          {/* Message */}
+          <div>
+            <label
+              htmlFor="message"
+              className="mb-1.5 block text-sm font-semibold text-warm-800"
+            >
+              {t('message')} <span aria-hidden="true" className="text-primary">*</span>
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              required
+              aria-required="true"
+              rows={5}
+              placeholder={t('messagePlaceholder')}
+              value={formData.message}
+              onChange={handleChange}
+              className={`resize-y ${INPUT_CLASS}`}
+            />
+          </div>
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Button
-          type="submit"
-          variant="primary"
-          size="md"
-          className="w-full sm:w-auto"
-          disabled={isLoading}
-        >
-          {isLoading ? t('submitting') : t('submit')}
-        </Button>
-        <p className="text-xs text-warm-500">{t('privacy')}</p>
-      </div>
-      <p className="text-xs text-warm-500">{t('responseTime')}</p>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <Button
+              type="submit"
+              variant="primary"
+              size="md"
+              className="w-full sm:w-auto"
+              disabled={isLoading}
+              aria-busy={isLoading}
+            >
+              {isLoading ? t('submitting') : t('submit')}
+            </Button>
+            <p className="text-xs text-warm-500">{t('privacy')}</p>
+          </div>
+          <p className="text-xs text-warm-500">{t('responseTime')}</p>
 
-      {hasError && (
-        <p role="alert" className="text-sm text-red-600">
-          {t('errorMessage')}
-        </p>
+          {hasError && (
+            <p role="alert" className="text-sm text-red-600">
+              {t('errorMessage')}
+            </p>
+          )}
+        </form>
       )}
-    </form>
+    </>
   );
 }

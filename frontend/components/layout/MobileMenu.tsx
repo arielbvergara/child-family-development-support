@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
@@ -14,12 +14,15 @@ interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
   locale: string;
+  triggerRef: React.RefObject<HTMLButtonElement | null>;
 }
 
-export function MobileMenu({ isOpen, onClose, locale }: MobileMenuProps) {
+export function MobileMenu({ isOpen, onClose, locale, triggerRef }: MobileMenuProps) {
   const t = useTranslations();
   const pathname = usePathname();
   const [isServicesExpanded, setIsServicesExpanded] = useState(false);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const didOpenRef = useRef(false);
 
   // Close on ESC key
   useEffect(() => {
@@ -29,6 +32,20 @@ export function MobileMenu({ isOpen, onClose, locale }: MobileMenuProps) {
     if (isOpen) document.addEventListener('keydown', handleKey);
     return () => document.removeEventListener('keydown', handleKey);
   }, [isOpen, onClose]);
+
+  // Focus management: move focus into dialog on open, restore to trigger on close.
+  // didOpenRef guards against calling triggerRef.focus() on the initial render
+  // when isOpen is already false (which would steal focus from the page).
+  useEffect(() => {
+    if (isOpen) {
+      didOpenRef.current = true;
+      requestAnimationFrame(() => {
+        closeButtonRef.current?.focus();
+      });
+    } else if (didOpenRef.current) {
+      triggerRef.current?.focus();
+    }
+  }, [isOpen, triggerRef]);
 
   // Prevent body scroll while open
   useEffect(() => {
@@ -55,9 +72,10 @@ export function MobileMenu({ isOpen, onClose, locale }: MobileMenuProps) {
           {/* Drawer */}
           <motion.div
             key="drawer"
+            id="mobile-menu"
             role="dialog"
             aria-modal="true"
-            aria-label={t('nav.home')}
+            aria-label={t('nav.mobileMenuLabel')}
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
@@ -70,8 +88,10 @@ export function MobileMenu({ isOpen, onClose, locale }: MobileMenuProps) {
                 Menu
               </span>
               <button
+                ref={closeButtonRef}
+                type="button"
                 onClick={onClose}
-                aria-label="Close menu"
+                aria-label={t('nav.closeMenu')}
                 className="flex h-10 w-10 items-center justify-center rounded-lg text-warm-600 transition-colors hover:bg-warm-100 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
                 <X className="h-5 w-5" />
@@ -91,6 +111,7 @@ export function MobileMenu({ isOpen, onClose, locale }: MobileMenuProps) {
                           onClick={() => setIsServicesExpanded((prev) => !prev)}
                           aria-expanded={isServicesExpanded}
                           aria-controls="services-mobile-menu"
+                          aria-current={isServicesActive ? 'page' : undefined}
                           className={`flex w-full cursor-pointer items-center justify-between rounded-lg px-4 py-3 text-base font-medium transition-colors ${
                             isServicesActive
                               ? 'bg-primary-light text-primary'
@@ -140,6 +161,7 @@ export function MobileMenu({ isOpen, onClose, locale }: MobileMenuProps) {
                       <Link
                         href={href}
                         onClick={onClose}
+                        aria-current={isActive ? 'page' : undefined}
                         className={`block rounded-lg px-4 py-3 text-base font-medium transition-colors ${
                           isActive
                             ? 'bg-primary-light text-primary'

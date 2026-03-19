@@ -34,6 +34,7 @@ export function Header({ locale }: HeaderProps) {
   const servicesButtonRef = useRef<HTMLButtonElement>(null);
   const localeDropdownRef = useRef<HTMLDivElement>(null);
   const localeButtonRef = useRef<HTMLButtonElement>(null);
+  const hamburgerButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!isServicesOpen) return;
@@ -78,6 +79,23 @@ export function Header({ locale }: HeaderProps) {
     return () => window.removeEventListener('hashchange', updateHash);
   }, [pathname]);
 
+  // Inert background content while mobile menu is open (focus trap support)
+  useEffect(() => {
+    const main = document.getElementById('main-content');
+    const footer = document.querySelector('footer');
+    if (isMenuOpen) {
+      main?.setAttribute('inert', '');
+      footer?.setAttribute('inert', '');
+    } else {
+      main?.removeAttribute('inert');
+      footer?.removeAttribute('inert');
+    }
+    return () => {
+      main?.removeAttribute('inert');
+      footer?.removeAttribute('inert');
+    };
+  }, [isMenuOpen]);
+
   // Get current page path without locale prefix for switching
   const pathWithoutLocale = pathname.replace(`/${locale}`, '') || '/';
 
@@ -95,6 +113,7 @@ export function Header({ locale }: HeaderProps) {
           {/* Logo */}
           <Link
             href={`/${locale}`}
+            aria-label={SITE_CONFIG.name}
             className="flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:rounded-md"
           >
             <LogoIcon className="bg-primary" />
@@ -129,6 +148,7 @@ export function Header({ locale }: HeaderProps) {
                       aria-haspopup="menu"
                       aria-expanded={isServicesOpen}
                       aria-controls="services-desktop-menu"
+                      aria-current={isServicesActive ? 'page' : undefined}
                       onClick={() => setIsServicesOpen((prev) => !prev)}
                       className={clsx(
                         'flex cursor-pointer items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
@@ -192,6 +212,7 @@ export function Header({ locale }: HeaderProps) {
                   key={link.href}
                   href={href}
                   onClick={() => setCurrentHash(linkHash ? `#${linkHash}` : '')}
+                  aria-current={isActive ? 'page' : undefined}
                   className={clsx(
                     'rounded-md px-3 py-2 text-sm font-medium transition-colors',
                     isActive
@@ -226,7 +247,8 @@ export function Header({ locale }: HeaderProps) {
                 type="button"
                 aria-haspopup="menu"
                 aria-expanded={isLocaleOpen}
-                aria-label="Select language"
+                aria-controls="locale-desktop-menu"
+                aria-label={t('nav.selectLanguage')}
                 onClick={() => setIsLocaleOpen((prev) => !prev)}
                 className="flex cursor-pointer items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm font-medium text-warm-700 transition-colors hover:bg-primary-light/50 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
@@ -238,6 +260,7 @@ export function Header({ locale }: HeaderProps) {
                 />
               </button>
               <div
+                id="locale-desktop-menu"
                 role="menu"
                 aria-label="Language"
                 className={clsx(
@@ -286,10 +309,12 @@ export function Header({ locale }: HeaderProps) {
 
             {/* Mobile hamburger */}
             <button
+              ref={hamburgerButtonRef}
               onClick={() => setIsMenuOpen(true)}
-              aria-label="Open menu"
+              aria-label={t('nav.openMenu')}
               aria-expanded={isMenuOpen}
               aria-controls="mobile-menu"
+              type="button"
               className="flex h-10 w-10 items-center justify-center rounded-lg text-warm-700 transition-colors hover:bg-warm-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:hidden"
             >
               <Menu className="h-5 w-5" />
@@ -302,6 +327,7 @@ export function Header({ locale }: HeaderProps) {
         isOpen={isMenuOpen}
         onClose={() => setIsMenuOpen(false)}
         locale={locale}
+        triggerRef={hamburgerButtonRef}
       />
     </>
   );

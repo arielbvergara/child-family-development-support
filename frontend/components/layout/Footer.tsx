@@ -62,8 +62,11 @@ export function Footer({ locale }: FooterProps) {
           </div>
 
           {/* Navigation column */}
-          <div>
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-warm-300">
+          <nav aria-labelledby="footer-nav-heading">
+            <h3
+              id="footer-nav-heading"
+              className="mb-4 text-sm font-semibold uppercase tracking-wider text-warm-300"
+            >
               {t('footer.navigation')}
             </h3>
             <ul className="space-y-2">
@@ -87,11 +90,14 @@ export function Footer({ locale }: FooterProps) {
                 );
               })}
             </ul>
-          </div>
+          </nav>
 
           {/* Legal column */}
-          <div>
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-warm-300">
+          <nav aria-labelledby="footer-legal-heading">
+            <h3
+              id="footer-legal-heading"
+              className="mb-4 text-sm font-semibold uppercase tracking-wider text-warm-300"
+            >
               {t('footer.legal')}
             </h3>
             <ul className="space-y-2">
@@ -112,11 +118,14 @@ export function Footer({ locale }: FooterProps) {
                 </Link>
               </li>
             </ul>
-          </div>
+          </nav>
 
           {/* Language column */}
-          <div>
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-warm-300">
+          <nav aria-labelledby="footer-lang-heading">
+            <h3
+              id="footer-lang-heading"
+              className="mb-4 text-sm font-semibold uppercase tracking-wider text-warm-300"
+            >
               Language / Taal / Sprache
             </h3>
             <ul className="space-y-2">
@@ -130,7 +139,7 @@ export function Footer({ locale }: FooterProps) {
                           ? 'font-semibold text-sage-300'
                           : 'text-warm-300 hover:text-white'
                       }`}
-                      aria-current={loc === locale ? 'true' : undefined}
+                      aria-current={loc === locale ? 'page' : undefined}
                     >
                       {label}
                     </Link>
@@ -138,7 +147,7 @@ export function Footer({ locale }: FooterProps) {
                 )
               )}
             </ul>
-          </div>
+          </nav>
         </div>
 
         {/* Bottom bar */}

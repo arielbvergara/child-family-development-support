@@ -4,7 +4,11 @@
     "services": "Diensten",
     "about": "Over mij",
     "contact": "Contact",
-    "bookConsultation": "Maak een afspraak"
+    "bookConsultation": "Maak een afspraak",
+    "mobileMenuLabel": "Navigatiemenu",
+    "closeMenu": "Menu sluiten",
+    "openMenu": "Menu openen",
+    "selectLanguage": "Taal selecteren"
   },
   "hero": {
     "headline": "Groei begeleiden, één gezin tegelijk",
@@ -52,7 +56,8 @@
       "label": "Geregistreerd"
     },
     "sectionTitle": "Vertrouwd door gezinnen",
-    "sectionSubtitle": "Wat ouders zeggen over de begeleiding"
+    "sectionSubtitle": "Wat ouders zeggen over de begeleiding",
+    "starsLabel": "5 sterren"
   },
   "testimonials": {
     "1": {

@@ -41,7 +41,7 @@ export function TrustSignals() {
             className="rounded-xl border border-border bg-warm-50 p-6 sm:p-8"
           >
             {/* Stars */}
-            <div className="mb-4 flex gap-1" aria-label="5 stars">
+            <div className="mb-4 flex gap-1" aria-label={t('trust.starsLabel')}>
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star
                   key={i}

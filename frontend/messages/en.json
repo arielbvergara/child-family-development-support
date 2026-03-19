@@ -4,7 +4,11 @@
     "services": "Services",
     "about": "About",
     "contact": "Contact",
-    "bookConsultation": "Make an Appointment"
+    "bookConsultation": "Make an Appointment",
+    "mobileMenuLabel": "Navigation menu",
+    "closeMenu": "Close menu",
+    "openMenu": "Open menu",
+    "selectLanguage": "Select language"
   },
   "hero": {
     "headline": "Nurturing Growth, One Family at a Time",
@@ -52,7 +56,8 @@
       "label": "Professional"
     },
     "sectionTitle": "Trusted by Families",
-    "sectionSubtitle": "What parents say about the support"
+    "sectionSubtitle": "What parents say about the support",
+    "starsLabel": "5 stars"
   },
   "testimonials": {
     "1": {

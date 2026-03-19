@@ -4,7 +4,11 @@
     "services": "Leistungen",
     "about": "Über mich",
     "contact": "Kontakt",
-    "bookConsultation": "Termin vereinbaren"
+    "bookConsultation": "Termin vereinbaren",
+    "mobileMenuLabel": "Navigationsmenü",
+    "closeMenu": "Menü schließen",
+    "openMenu": "Menü öffnen",
+    "selectLanguage": "Sprache auswählen"
   },
   "hero": {
     "headline": "Wachstum begleiten, eine Familie nach der anderen",
@@ -52,7 +56,8 @@
       "label": "Fachkraft"
     },
     "sectionTitle": "Von Familien vertraut",
-    "sectionSubtitle": "Was Eltern über die Begleitung sagen"
+    "sectionSubtitle": "Was Eltern über die Begleitung sagen",
+    "starsLabel": "5 Sterne"
   },
   "testimonials": {
     "1": {
