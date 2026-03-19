@@ -113,6 +113,7 @@ export function Header({ locale }: HeaderProps) {
           {/* Logo */}
           <Link
             href={`/${locale}`}
+            aria-label={SITE_CONFIG.name}
             className="flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:rounded-md"
           >
             <LogoIcon className="bg-primary" />
@@ -246,6 +247,7 @@ export function Header({ locale }: HeaderProps) {
                 type="button"
                 aria-haspopup="menu"
                 aria-expanded={isLocaleOpen}
+                aria-controls="locale-desktop-menu"
                 aria-label="Select language"
                 onClick={() => setIsLocaleOpen((prev) => !prev)}
                 className="flex cursor-pointer items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm font-medium text-warm-700 transition-colors hover:bg-primary-light/50 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
@@ -258,6 +260,7 @@ export function Header({ locale }: HeaderProps) {
                 />
               </button>
               <div
+                id="locale-desktop-menu"
                 role="menu"
                 aria-label="Language"
                 className={clsx(
